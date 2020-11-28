@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+	background-color: var(--color-bg-base);
+
+	--h-content-area: calc(100vh - theme('height.20'));
+	--min-h-content-area: calc(100vh - theme('height.20'));
+	--color-white: rgba(255, 255, 255, 1);
+	--color-offwhite: rgba(204, 204, 204, 1);
+	--color-grey: rgba(128, 128, 128, 1);
+	--color-black: rgba(9, 9, 9, 1);
+	--color-blue: rgba(34, 184, 251, 1);
+	--color-blue-darker: rgba(20, 107, 227, 1);
+	--color-yellow: rgba(255, 255, 0, 0.5);
+
+	--color-bg-base: var(--color-black);
+	--color-bg-lighter: var(--color-offwhite);
+	--color-bg-darker: var(--color-grey);
+	--color-bg-accent: var(--color-blue);
+	--color-bg-accent-darker: var(--color-blue-darker);
+	--color-text-base: var(--color-white);
+	--color-text-lighter: var(--color-offwhite);
+	--color-text-darker: var(--color-grey);
+	--color-text-accent: var(--color-blue);
+	--color-input-bg: var(--color-offwhite);
+	--color-input-placeholder: var(--color-grey);
+	--color-input-text: var(--color-text-black);
+	--color-border: var(--color-bg-lighter);
+	--color-divider: rgba(14, 17, 22, 1);
+	--color-shadow: 255, 255, 255;
+	--color-form: var(--color-bg-darker);
+}
+
+html,
+body {
+	color: var(--color-text-base);
+	@apply font-mono;
+}
+
+h1 {
+	@apply uppercase text-3xl font-medium tracking-wider my-4;
+}
+
+input,
+textarea {
+	background-color: var(--color-bg-base);
+	border: solid var(--color-offwhite) 1px;
+}
+
+section {
+	z-index: 1;
+}
+
+.content {
+	@apply max-w-screen-md;
+	padding: 1rem;
+	@apply mx-auto;
+	position: relative;
+}
+
+.filter {
+	backdrop-filter: blur(20px);
+}
+
+.overlay {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.9);
+	overflow-x: hidden;
+	transition-delay: 100ms;
+	transition: 0.5s;
+}
+
+.overlay-content {
+	position: relative;
+	top: 25%;
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+	transition: 0.3s;
+}
