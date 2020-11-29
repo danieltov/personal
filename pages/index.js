@@ -348,9 +348,7 @@ export default function Home() {
 								</p>
 							</div>
 							<div className='my-4'>
-								<h3 className='text-xl'>
-									WordPress Technician
-								</h3>
+								<h3 className='text-xl'>WordPress Developer</h3>
 								<p className='text-lg'>PMA</p>
 								<p className='text-base text-gray-200'>
 									January 2018 &ndash; December 2018
