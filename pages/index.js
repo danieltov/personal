@@ -10,6 +10,7 @@ export default function Home() {
 	const [message, setMessage] = useState(``);
 	const [name, setName] = useState(``);
 	const [phone, setPhone] = useState(``);
+	const [buttonDisabled, setButtonDisabled] = useState(false);
 	const aboutRef = useRef(null);
 	const contactRef = useRef(null);
 	const helloRef = useRef(null);
@@ -23,6 +24,7 @@ export default function Home() {
 
 	const handleContactSubmit = async event => {
 		event.preventDefault();
+		setButtonDisabled(true);
 		const recipientMail = process.env.NEXT_PUBLIC_EMAIL;
 
 		const res = await sendContactMail(
@@ -34,6 +36,7 @@ export default function Home() {
 		);
 
 		if (res.status < 300) {
+			setButtonDisabled(false);
 			setName(``);
 			setEmail(``);
 			setPhone(``);
@@ -42,6 +45,7 @@ export default function Home() {
 				`Message sent! Thank you for getting in touch, I'll be sure to respond as soon as I can.`
 			);
 		} else {
+			setButtonDisabled(false);
 			alert(
 				`Message failed to send. Please try again or contact me on LinkedIn or Twitter.`
 			);
@@ -491,8 +495,9 @@ export default function Home() {
 						<div className='max-w-lg mx-auto lg:max-w-none'>
 							<form
 								name='contact'
-								data-netlify='true'
-								onSubmit={handleContactSubmit}
+								onSubmit={
+									!buttonDisabled && handleContactSubmit
+								}
 								method='POST'
 								className='grid grid-cols-1 gap-y-6'
 							>
