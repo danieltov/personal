@@ -354,7 +354,7 @@ export default function Home() {
 											Native)
 										</p>
 										<p className='my-4'>
-											JaveScript Frameworks (React, Next,
+											JavaScript Frameworks (React, Next,
 											Gatsby, Vue)
 										</p>
 										<p className='my-4'>
