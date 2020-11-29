@@ -4,18 +4,16 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"build": "next build && next export",
+		"build": "next build",
 		"start": "next start",
 		"pretty": "prettier src --write",
 		"linty": "eslint src --fix",
 		"clean": "yarn pretty && yarn linty"
 	},
 	"dependencies": {
-		"axios": "^0.21.0",
-		"@ap.cx/react-fullpage": "^0.2.0",
 		"@tailwindcss/ui": "^0.6.1",
+		"axios": "^0.21.0",
 		"next": "10.0.3",
-		"pure-react-carousel": "^1.27.6",
 		"react": "17.0.1",
 		"react-dom": "17.0.1"
 	},
@@ -28,6 +26,7 @@
 		"eslint-plugin-prettier": "^3.1.4",
 		"eslint-plugin-react": "^7.20.3",
 		"eslint-plugin-react-hooks": "^4.1.2",
+		"nodemailer": "^6.4.16",
 		"postcss-preset-env": "^6.7.0",
 		"prettier": "^2.0.5",
 		"tailwindcss": "^1.8.10"

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import axios from 'axios';
+import { sendContactMail } from '../components/mail-api';
 
 export default function Home() {
 	const [email, setEmail] = useState(``);
@@ -21,9 +21,31 @@ export default function Home() {
 		setMenuActive(false);
 	};
 
-	const handleContactSubmit = event => {
+	const handleContactSubmit = async event => {
 		event.preventDefault();
-		return null;
+		const recipientMail = process.env.NEXT_PUBLIC_EMAIL;
+
+		const res = await sendContactMail(
+			recipientMail,
+			name,
+			email,
+			phone,
+			message
+		);
+
+		if (res.status < 300) {
+			setName(``);
+			setEmail(``);
+			setPhone(``);
+			setMessage(``);
+			alert(
+				`Message sent! Thank you for getting in touch, I'll be sure to respond as soon as I can.`
+			);
+		} else {
+			alert(
+				`Message failed to send. Please try again or contact me on LinkedIn or Twitter.`
+			);
+		}
 	};
 
 	const scrollTo = ref =>

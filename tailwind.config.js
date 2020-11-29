@@ -2,7 +2,7 @@
 const defaultTheme = require(`tailwindcss/defaultTheme`);
 
 module.exports = {
-	purge: [`./src/**/*.{js,ts,jsx,tsx}`],
+	purge: [`./components/**/*.js`, `./pages/**/*.js`],
 	theme: {
 		boxShadow: {
 			xs: `0 0 0 1px rgba(var(--color-shadow), 0.05)`,
