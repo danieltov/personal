@@ -29,13 +29,17 @@ export default function Home() {
 			data: { name, email, phone, message },
 		}).then(response => {
 			if (response.data.status === `sent`) {
-				alert(`Message sent. Thank you for getting in touch.`);
+				alert(
+					`Message sent! Thank you for getting in touch, I'll be sure to respond as soon as I can.`
+				);
 				setName(``);
 				setEmail(``);
 				setPhone(``);
 				setMessage(``);
 			} else if (response.data.status === `failed`) {
-				alert(`Message Failed. Please try again.`);
+				alert(
+					`Message failed to send. Please try again or contact me on LinkedIn or Twitter.`
+				);
 			}
 		});
 	};
