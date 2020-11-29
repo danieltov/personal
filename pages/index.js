@@ -165,7 +165,7 @@ export default function Home() {
 											scrollTo(resumeRef);
 										}}
 									>
-										Resum&eacute;
+										Resume
 									</a>
 								</Link>
 							</li>
