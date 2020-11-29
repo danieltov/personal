@@ -482,7 +482,7 @@ export default function Home() {
 				<header>
 					<h1>Contact</h1>
 				</header>
-				<div className='flex flex-col sm:flex-col-reverse'>
+				<div className='flex flex-col-reverse'>
 					<div className='py-16 px-4 sm:px-8 lg:px-16'>
 						<div className='max-w-lg mx-auto lg:max-w-none'>
 							<form
