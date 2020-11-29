@@ -25,15 +25,8 @@ export default function Home() {
 	const handleContactSubmit = async event => {
 		event.preventDefault();
 		setButtonDisabled(true);
-		const recipientMail = process.env.NEXT_PUBLIC_EMAIL;
 
-		const res = await sendContactMail(
-			recipientMail,
-			name,
-			email,
-			phone,
-			message
-		);
+		const res = await sendContactMail(name, email, phone, message);
 
 		if (res.status < 300) {
 			setButtonDisabled(false);

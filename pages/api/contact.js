@@ -12,43 +12,35 @@ const transporter = nodemailer.createTransport({
 });
 
 export default async (req, res) => {
-	const { senderMail, name, content, phone, recipientMail } = req.body;
+	const { email, name, message, phone } = req.body;
 
 	// Check if fields are all filled
-	if (
-		senderMail === `` ||
-		name === `` ||
-		content === `` ||
-		recipientMail === ``
-	) {
+	if (email === `` || name === `` || message === ``) {
 		res.status(403).send(``);
 		return;
 	}
 
-	const html = `<p>Name: ${name}</p><p>Email: ${senderMail}</p><p>Phone: ${phone}</p><p>Message: ${content}</p>`;
+	const html = `<p>Name: ${name}</p><p>Email: ${email}</p><p>Phone: ${phone}</p><p>Message: ${message}</p>`;
 
 	const mailerRes = await mailer({
-		senderMail,
+		email,
 		name,
 		html,
 	});
 	res.send(mailerRes);
 };
 
-const mailer = ({ senderMail, name, html }) => {
-	const from =
-		name && senderMail
-			? `${name} <${senderMail}>`
-			: `${name || senderMail}`;
-	const message = {
-		from: senderMail,
+const mailer = ({ email, name, html }) => {
+	const from = name && email ? `${name} <${email}>` : `${name || email}`;
+	const sendThis = {
+		from: email,
 		to: EMAIL,
 		subject: `New Portfolio Message: ${from}`,
 		html,
 	};
 
 	return new Promise((resolve, reject) => {
-		transporter.sendMail(message, (error, info) =>
+		transporter.sendMail(sendThis, (error, info) =>
 			error ? reject(error) : resolve(info)
 		);
 	});
