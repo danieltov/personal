@@ -167,6 +167,16 @@ export default function Home() {
 								</a>
 							</Link>
 						</li>
+						<li className='my-3'>
+							<Link href='https://github.com/danieltov'>
+								<a target='_blank'>GitHub</a>
+							</Link>
+						</li>
+						<li className='my-3'>
+							<Link href='https://www.linkedin.com/in/danieltovario/'>
+								<a target='_blank'>LinkedIn</a>
+							</Link>
+						</li>
 					</ul>
 				</div>
 			</nav>
@@ -578,9 +588,9 @@ export default function Home() {
 					<div>
 						<p className='my-4 text-lg'>
 							Thanks for visiting! I really appreciate it.
-							I&apos;m really open to collaboration and actively
-							looking for a full-time position remotely or in the
-							Austin, Texas area. Get in touch!
+							I&apos;m open to collaboration and actively looking
+							for a full-time position remotely or in the Austin,
+							Texas area. Get in touch!
 						</p>
 					</div>
 				</div>
