@@ -451,7 +451,7 @@ export default function Home() {
 					</div>
 				</section>
 				{/* YAY */}
-				<aside>
+				<aside className='content'>
 					<figure className='mx-auto w-5/12 my-auto sm:w-3/12'>
 						<Image
 							className='rounded-full bg-gradient-to-br from-red-600 via-indigo-700 to-blue-700'
