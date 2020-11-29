@@ -1,3 +1,4 @@
+require(`dotenv`).config();
 const express = require(`express`);
 const router = express.Router();
 const cors = require(`cors`);
@@ -9,15 +10,15 @@ app.use(express.json());
 app.use(`/`, router);
 app.listen(5000, () => console.log(`Server Running`));
 
-const EMAIL = ``;
-const SECRET = ``;
+// TODO ENV VARIABLES
+const { EMAIL, PASS, HOST } = process.env;
 
 const contactEmail = nodemailer.createTransport({
-	host: `mail.danieltovar.io`,
+	host: HOST,
 	port: 465,
 	auth: {
 		user: EMAIL,
-		pass: SECRET,
+		pass: PASS,
 	},
 });
 

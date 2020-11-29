@@ -18,7 +18,7 @@ export default function Home() {
 
 	const handleMenuItemClick = e => {
 		e.preventDefault();
-		setMenuActive(!menuActive);
+		setMenuActive(false);
 	};
 
 	const handleContactSubmit = event => {
@@ -59,7 +59,10 @@ export default function Home() {
 				<div className='fixed top-0 right-0 p-3 sm:p-4 sm:inset-0'>
 					<div
 						className='w-8 2xl:w-14 filter rounded box-content'
-						onClick={handleMenuItemClick}
+						onClick={e => {
+							e.preventDefault();
+							setMenuActive(!menuActive);
+						}}
 					>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
@@ -192,15 +195,27 @@ export default function Home() {
 					</h1>
 					<div className=' my-5 max-w-md mx-auto sm:flex sm:justify-center md:my-8'>
 						<div className='rounded-sm border-2 border-gray-100'>
-							<Link href='#'>
-								<a className='w-full flex items-center justify-center text-gray-100 uppercase p-3 text-center'>
+							<Link href='/'>
+								<a
+									className='w-full flex items-center justify-center text-gray-100 uppercase p-3 text-center'
+									onClick={e => {
+										handleMenuItemClick(e);
+										scrollTo(contactRef);
+									}}
+								>
 									Connect With Me
 								</a>
 							</Link>
 						</div>
 						<div>
-							<Link href='#'>
-								<a className='flex items-center justify-center text-gray-300 uppercase p-4 text-center'>
+							<Link href='/'>
+								<a
+									className='flex items-center justify-center text-gray-300 uppercase p-4 text-center'
+									onClick={e => {
+										handleMenuItemClick(e);
+										scrollTo(workRef);
+									}}
+								>
 									See My Work &rarr;
 								</a>
 							</Link>
@@ -228,8 +243,8 @@ export default function Home() {
 						I&apos;m a Los Angeles native and soon-to-be Austin
 						transplant, by way of Salt Lake City, Hartford, and
 						Honolulu. Along the way I have built thoughtful things
-						for the web and mobile for start-ups and major
-						insitutions.
+						for the web and mobile for start-ups and large
+						institutions.
 					</p>
 					<p>
 						I&apos;ve puttered around the browser building the web
@@ -325,17 +340,24 @@ export default function Home() {
 										</p>
 										<p className='my-4'>
 											JaveScript Frameworks (React, Next,
-											Vue)
+											Gatsby, Vue)
 										</p>
 										<p className='my-4'>
 											PHP Frameworks (Laravel)
 										</p>
-										<p className='my-4'>
+										{/* <p className='my-4'>
 											Responsive Design &amp; Development
 										</p>
 										<p className='my-4'>Connecting APIs</p>
 										<p className='my-4'>
 											Semantic HTML &amp; CSS
+										</p> */}
+										<p className='my-4'>
+											Coupled CMSes (WordPress, OUCampus,
+											Shopify)
+										</p>
+										<p className='my-4'>
+											Headless CMSes (Ghost, Contentful)
 										</p>
 									</div>
 								</header>
@@ -361,10 +383,13 @@ export default function Home() {
 									<h3 className='text-xl my-4'>Team</h3>
 									<div className='my-4 sm:w-10/12'>
 										<p className='my-4'>Product Design</p>
+										<p className='my-4'>
+											Project Management
+										</p>
 										<p className='my-4'>Agile</p>
 										<p className='my-4'>Scrum</p>
 										<p className='my-4'>
-											Project Management
+											Efficient Remote Work
 										</p>
 									</div>
 								</header>
@@ -391,7 +416,7 @@ export default function Home() {
 					<h1>Work</h1>
 				</header>
 				<aside>
-					<h2 className='text-2xl'>Circles</h2>
+					<h2 className='text-2xl'>Circles by ZooWho, Inc.</h2>
 					<ul className='list-inside list-disc'>
 						<li className='my-2'>
 							Principal full-stack software developer building and
@@ -454,7 +479,7 @@ export default function Home() {
 					<h1>Contact</h1>
 				</header>
 				<div className='flex flex-col sm:flex-col-reverse'>
-					<div className='py-16 px-4'>
+					<div className='py-16 px-4 sm:px-8 lg:px-16'>
 						<div className='max-w-lg mx-auto lg:max-w-none'>
 							<form
 								onSubmit={handleContactSubmit}
