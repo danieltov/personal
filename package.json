@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
-		"start": "next start",
+		"start": "next start && next export",
 		"pretty": "prettier src --write",
 		"linty": "eslint src --fix",
 		"clean": "yarn pretty && yarn linty"
