@@ -23,25 +23,7 @@ export default function Home() {
 
 	const handleContactSubmit = event => {
 		event.preventDefault();
-		axios({
-			method: `POST`,
-			url: `http://localhost:5000/contact`,
-			data: { name, email, phone, message },
-		}).then(response => {
-			if (response.data.status === `sent`) {
-				alert(
-					`Message sent! Thank you for getting in touch, I'll be sure to respond as soon as I can.`
-				);
-				setName(``);
-				setEmail(``);
-				setPhone(``);
-				setMessage(``);
-			} else if (response.data.status === `failed`) {
-				alert(
-					`Message failed to send. Please try again or contact me on LinkedIn or Twitter.`
-				);
-			}
-		});
+		return null;
 	};
 
 	const scrollTo = ref =>
@@ -486,6 +468,8 @@ export default function Home() {
 					<div className='py-16 px-4 sm:px-8 lg:px-16'>
 						<div className='max-w-lg mx-auto lg:max-w-none'>
 							<form
+								name='contact'
+								data-netlify='true'
 								onSubmit={handleContactSubmit}
 								method='POST'
 								className='grid grid-cols-1 gap-y-6'
