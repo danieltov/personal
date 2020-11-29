@@ -436,15 +436,14 @@ export default function Home() {
 										<h3 className='text-xl my-4'>Team</h3>
 										<div className='my-4 sm:w-10/12'>
 											<p className='my-4'>
-												Product Design
+												Product Development
 											</p>
 											<p className='my-4'>
 												Project Management
 											</p>
-											<p className='my-4'>Agile</p>
-											<p className='my-4'>Scrum</p>
+											<p className='my-4'>Agile/Scrum</p>
 											<p className='my-4'>
-												Efficient Remote Work
+												High Remote Productivity
 											</p>
 										</div>
 									</header>
