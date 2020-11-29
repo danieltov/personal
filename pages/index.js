@@ -587,10 +587,9 @@ export default function Home() {
 					</div>
 					<div>
 						<p className='my-4 text-lg'>
-							Thanks for visiting! I really appreciate it.
-							I&apos;m open to collaboration and actively looking
-							for a full-time position remotely or in the Austin,
-							Texas area. Get in touch!
+							Thanks for visiting! I really appreciate it. I love
+							what I do and I&apos;m very open to collaboration.
+							Get in touch!
 						</p>
 					</div>
 				</div>
