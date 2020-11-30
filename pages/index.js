@@ -488,7 +488,7 @@ export default function Home() {
 						<h1>Work</h1>
 					</header>
 					<Slider
-						dots={true}
+						dots={false}
 						infinite={true}
 						speed={500}
 						slidesToShow={1}
