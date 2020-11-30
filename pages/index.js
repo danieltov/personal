@@ -308,7 +308,7 @@ export default function Home() {
 						<header className='sm:w-11/12'>
 							<h1>
 								Resume (
-								<Link href='/static/DanielTovarWebDeveloperResume.pdf'>
+								<Link href='/static/DanielTovarWebDeveloperResume.PDF'>
 									<a
 										target='_blank'
 										rel='noreferrer'
