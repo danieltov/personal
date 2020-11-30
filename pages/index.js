@@ -306,7 +306,20 @@ export default function Home() {
 				>
 					<div className='flex flex-col sm:relative sm:flex-row sm:flex-wrap sm:justify-around'>
 						<header className='sm:w-11/12'>
-							<h1>Resume</h1>
+							<h1>
+								Resume (
+								<Link href='/static/DanielTovarWebDeveloperResume.pdf'>
+									<a
+										target='_blank'
+										rel='noreferrer'
+										className='mx-1'
+										download
+									>
+										PDF
+									</a>
+								</Link>
+								)
+							</h1>
 						</header>
 						<aside className='sm:w-5/12'>
 							<header>
