@@ -496,7 +496,7 @@ export default function Home() {
 						swipe={true}
 						afterChange={() => scrollTo(workRef)}
 					>
-						<aside>
+						<aside className='outline-none'>
 							<h2 className='text-2xl'>
 								Circles App by ZooWho, Inc.
 							</h2>
@@ -574,7 +574,7 @@ export default function Home() {
 								></iframe>
 							</figure>
 						</aside>
-						<aside>
+						<aside className='outline-none'>
 							<h2 className='text-2xl'>Enough</h2>
 							<ul className='mx-1'>
 								<li className='my-2'>
