@@ -574,7 +574,7 @@ export default function Home() {
 										today? &mdash; and depending on the
 										answers, one of two things will happen.
 									</p>
-									<p className='m-2'>
+									<p className='my-4 ml-6'>
 										1. If the user is feeing 🙂, the app
 										will prompt them to enter at least one
 										positive affirmation: this could be an
@@ -583,7 +583,7 @@ export default function Home() {
 										in their life they’re grateful for, or
 										one of their favorite quotes.
 									</p>
-									<p className='m-2'>
+									<p className='m-4 ml-6'>
 										2. If the user is feeling 😐 or 🙁, the
 										app will remind them of a positive
 										affirmation they’ve entered before. They
