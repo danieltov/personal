@@ -496,11 +496,11 @@ export default function Home() {
 						swipe={true}
 						afterChange={() => scrollTo(workRef)}
 					>
-						<aside className='w-full'>
+						<aside>
 							<h2 className='text-2xl'>
 								Circles App by ZooWho, Inc.
 							</h2>
-							<ul>
+							<ul className='mx-1'>
 								<li className='my-2'>
 									<p>
 										This production iOS and Andriod app is
@@ -576,7 +576,7 @@ export default function Home() {
 						</aside>
 						<aside>
 							<h2 className='text-2xl'>Enough</h2>
-							<ul>
+							<ul className='mx-1'>
 								<li className='my-2'>
 									<p>
 										This a personal project I built, keeping
