@@ -527,7 +527,7 @@ export default function Home() {
 										efficiently develop for both iOS and
 										Android. My duties include designing the
 										app&apos;s data flow, connecting and
-										consuming our API, handling up reminders
+										consuming our API, handling reminders
 										and push notifications, and refining UI
 										elements as needed.
 									</p>
@@ -579,9 +579,7 @@ export default function Home() {
 							<ul className='mx-1'>
 								<li className='my-2'>
 									<p>
-										This a personal project I built, keeping
-										the people in my life who suffer from
-										bouts of depression in mind. The concept
+										This a personal project I built with mental health in mind. The concept
 										is simple: the app asks users one
 										question &mdash; how are you feeling
 										today? &mdash; and depending on the
