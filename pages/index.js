@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import Slider from 'react-slick';
 import { sendContactMail } from '../components/mail-api';
 
 export default function Home() {
@@ -65,7 +66,7 @@ export default function Home() {
 					key='title'
 				/>
 				<meta name='robots' content='index,follow' />
-				<meta charset='utf-8' />
+				<meta charSet='utf-8' />
 				<meta
 					name='keywords'
 					content='Web Developer, Software Developer, React Developer, JavaScript Developer, Front-End Developer, Full-Stack Developer, Front-End Web Developer'
@@ -451,6 +452,7 @@ export default function Home() {
 					</div>
 				</section>
 				{/* YAY */}
+
 				<aside className='content'>
 					<figure className='mx-auto w-5/12 my-auto sm:w-3/12'>
 						<Image
@@ -462,68 +464,183 @@ export default function Home() {
 						/>
 					</figure>
 				</aside>
+
 				{/* WORK */}
-				<section ref={workRef} className='content my-16 flex flex-col'>
+				<section
+					id='slider'
+					ref={workRef}
+					className='content z-10 my-16 flex flex-col'
+				>
 					<header>
 						<h1>Work</h1>
 					</header>
-					<aside>
-						<h2 className='text-2xl'>Circles by ZooWho, Inc.</h2>
-						<ul className='list-inside list-disc'>
-							<li className='my-2'>
-								Principal full-stack software developer building
-								and making product-level decisions on JavaScript
-								web and mobile applications (React/Next/React
-								Native) and a RESTful API written in PHP
-								(Laravel).
-							</li>
-							<li className='my-2'>
-								Design, administer, support and monitor a MySQL
-								database and maintain servers provisioned on
-								Amazon Web Services (AWS).
-							</li>
-						</ul>
-						<div className='flex flex-col sm:flex-row sm:justify-center my-4'>
-							<Link href='https://zoowho.com/features'>
-								<a
-									className='flex items-center justify-center text-gray-300 uppercase text-center mx-4'
-									target='_blank'
-									rel='noreferrer'
-								>
-									Website &#8599;
-								</a>
-							</Link>
-							<Link href='https://zoowho.com/download/'>
-								<a
-									className='flex items-center justify-center text-gray-300 uppercase text-center mx-4'
-									target='_blank'
-									rel='noreferrer'
-								>
-									Download App &#8599;
-								</a>
-							</Link>
-						</div>
-						<figure className='hidden sm:block'>
-							<Image
-								className='rounded-sm'
-								src='/img/work-circles.png'
-								alt='iOS App Mockup'
-								width={842}
-								height={595}
-								layout='intrinsic'
-							/>
-						</figure>
-						<figure className='sm:hidden'>
-							<iframe
-								width='100%'
-								height='60%'
-								src='https://www.youtube-nocookie.com/embed/n_4Be8XXxbg?controls=1'
-								frameBorder='0'
-								allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-								allowFullScreen
-							></iframe>
-						</figure>
-					</aside>
+					<Slider
+						dots={true}
+						infinite={true}
+						speed={500}
+						slidesToShow={1}
+						slidesToScroll={1}
+						swipe={true}
+						afterChange={() => scrollTo(workRef)}
+					>
+						<aside className='w-full'>
+							<h2 className='text-2xl'>
+								Circles App by ZooWho, Inc.
+							</h2>
+							<ul>
+								<li className='my-2'>
+									<p>
+										This production iOS and Andriod app is
+										built by me, in a full-stack role, and
+										another front-end developer. Circles is
+										a &quot;Personal CRM, Contacts Manager,
+										and Digital Rolodex&quot; that allows
+										users store notes, details, factoids,
+										reminders, and goals to business or
+										personal contacts.
+									</p>
+								</li>
+								<li className='my-2'>
+									<p>
+										As the sole back-end developer, it is my
+										duty to design and build a RESTful API
+										in PHP (Laravel) and design and
+										administer a MySQL database.
+									</p>
+								</li>
+								<li className='my-2'>
+									<p>
+										The app is built in React Native to
+										efficiently develop for both iOS and
+										Android. My duties include designing the
+										app&apos;s data flow, connecting and
+										consuming our API, handling up reminders
+										and push notifications, and refining UI
+										elements as needed.
+									</p>
+								</li>
+							</ul>
+							<div className='flex flex-col sm:flex-row sm:justify-center my-4'>
+								<Link href='https://zoowho.com/features/'>
+									<a
+										className='flex items-center justify-center text-gray-300 uppercase text-center mx-4'
+										target='_blank'
+										rel='noreferrer'
+									>
+										Website &#8599;
+									</a>
+								</Link>
+								<Link href='https://zoowho.com/download/'>
+									<a
+										className='flex items-center justify-center text-gray-300 uppercase text-center mx-4'
+										target='_blank'
+										rel='noreferrer'
+									>
+										Download App &#8599;
+									</a>
+								</Link>
+							</div>
+							<figure className='hidden sm:block'>
+								<Image
+									className='rounded-sm'
+									src='/img/work-circles.png'
+									alt='iOS App Mockup'
+									width={842}
+									height={595}
+									layout='intrinsic'
+								/>
+							</figure>
+							<figure className='sm:hidden'>
+								<iframe
+									width='100%'
+									height='60%'
+									src='https://www.youtube-nocookie.com/embed/n_4Be8XXxbg?controls=1'
+									frameBorder='0'
+									allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+									allowFullScreen
+								></iframe>
+							</figure>
+						</aside>
+						<aside>
+							<h2 className='text-2xl'>Enough</h2>
+							<ul>
+								<li className='my-2'>
+									<p>
+										This a personal project I built, keeping
+										the people in my life who suffer from
+										bouts of depression in mind. The concept
+										is simple: the app asks users one
+										question &mdash; how are you feeling
+										today? &mdash; and depending on the
+										answers, one of two things will happen.
+									</p>
+									<p className='m-2'>
+										1. If the user is feeing 🙂, the app
+										will prompt them to enter at least one
+										positive affirmation: this could be an
+										achievement they’re proud of, a personal
+										strength they’ve identified, something
+										in their life they’re grateful for, or
+										one of their favorite quotes.
+									</p>
+									<p className='m-2'>
+										2. If the user is feeling 😐 or 🙁, the
+										app will remind them of a positive
+										affirmation they’ve entered before. They
+										will then have the option to cycle
+										through other affirmations or add new
+										one.
+									</p>
+								</li>
+								<li className='my-2'>
+									<p>
+										I designed the UI and UX, then built the
+										UI in React.
+									</p>
+								</li>
+								<li className='my-2'>
+									<p>
+										I developed the back-end. Data is read
+										and stored using a MongoDB-powered API,
+										served on a Node/Express server.
+									</p>
+								</li>
+								<li className='my-2'>
+									<p>Up next: a mobile app!</p>
+								</li>
+							</ul>
+							<div className='flex flex-col sm:flex-row sm:justify-center my-4'>
+								<Link href='http://enough-app.com'>
+									<a
+										className='flex items-center justify-center text-gray-300 uppercase text-center mx-4'
+										target='_blank'
+										rel='noreferrer'
+									>
+										WEBSITE &#8599;
+									</a>
+								</Link>
+								<Link href='https://github.com/danieltov/enough'>
+									<a
+										className='flex items-center justify-center text-gray-300 uppercase text-center mx-4'
+										target='_blank'
+										rel='noreferrer'
+									>
+										GitHub Repo &#8599;
+									</a>
+								</Link>
+							</div>
+							<figure>
+								<Image
+									className='rounded-sm'
+									src='/img/enough.png'
+									alt='Screenshot of Website'
+									width={1020}
+									height={560}
+									layout='intrinsic'
+								/>
+							</figure>
+						</aside>
+					</Slider>
 				</section>
 
 				{/* CONTACT */}
