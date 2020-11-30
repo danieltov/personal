@@ -469,7 +469,7 @@ export default function Home() {
 				<section
 					id='slider'
 					ref={workRef}
-					className='content z-10 my-16 flex flex-col'
+					className='content my-16 flex flex-col'
 				>
 					<header>
 						<h1>Work</h1>
