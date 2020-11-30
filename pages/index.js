@@ -507,9 +507,9 @@ export default function Home() {
 										built by me, in a full-stack role, and
 										another front-end developer. Circles is
 										a &quot;Personal CRM, Contacts Manager,
-										and Digital Rolodex&quot; that allows
-										users store notes, details, factoids,
-										reminders, and goals to business or
+										and Digital Rolodex&quot; which allows
+										users to store notes, details, factoids,
+										reminders and goals to business or
 										personal contacts.
 									</p>
 								</li>
@@ -528,8 +528,8 @@ export default function Home() {
 										Android. My duties include designing the
 										app&apos;s data flow, connecting and
 										consuming our API, handling reminders
-										and push notifications, and refining UI
-										elements as needed.
+										and push notifications, and building UI
+										elements.
 									</p>
 								</li>
 							</ul>
@@ -579,11 +579,12 @@ export default function Home() {
 							<ul className='mx-1'>
 								<li className='my-2'>
 									<p>
-										This a personal project I built with mental health in mind. The concept
-										is simple: the app asks users one
-										question &mdash; how are you feeling
-										today? &mdash; and depending on the
-										answers, one of two things will happen.
+										This a personal project I built with
+										mental health in mind. The concept is
+										simple: the app asks users one question
+										&mdash; how are you feeling today?
+										&mdash; and depending on the answers,
+										one of two things will happen.
 									</p>
 									<p className='my-4 ml-6'>
 										1. If the user is feeing 🙂, the app
