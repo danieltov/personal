@@ -87,3 +87,11 @@ section {
 	margin-top: 30px;
 	transition: 0.3s;
 }
+
+#slider li button:before {
+	color: var(--color-offwhite);
+}
+
+#slider li.slick-active button:before {
+	color: var(--color-white);
+}
