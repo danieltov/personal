@@ -587,7 +587,7 @@ export default function Home() {
 										one of two things will happen.
 									</p>
 									<p className='my-4 ml-6'>
-										1. If the user is feeing 🙂, the app
+										1. If the user is feeling 🙂, the app
 										will prompt them to enter at least one
 										positive affirmation: this could be an
 										achievement they’re proud of, a personal
