@@ -5,7 +5,7 @@ export const sendContactMail = async (name, email, phone, message) => {
 		name,
 		email,
 		phone,
-		message,
+		message
 	};
 
 	try {
@@ -13,9 +13,9 @@ export const sendContactMail = async (name, email, phone, message) => {
 			method: `post`,
 			url: `/api/contact`,
 			headers: {
-				'Content-Type': `application/json`,
+				'Content-Type': `application/json`
 			},
-			data,
+			data
 		});
 		return res;
 	} catch (error) {

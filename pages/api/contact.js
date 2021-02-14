@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport({
 	port: PORT,
 	auth: {
 		user: EMAIL,
-		pass: PASS,
-	},
+		pass: PASS
+	}
 });
 
 export default async (req, res) => {
@@ -25,7 +25,7 @@ export default async (req, res) => {
 	const mailerRes = await mailer({
 		email,
 		name,
-		html,
+		html
 	});
 	res.send(mailerRes);
 };
@@ -36,12 +36,10 @@ const mailer = ({ email, name, html }) => {
 		from: email,
 		to: EMAIL,
 		subject: `New Portfolio Message: ${from}`,
-		html,
+		html
 	};
 
 	return new Promise((resolve, reject) => {
-		transporter.sendMail(sendThis, (error, info) =>
-			error ? reject(error) : resolve(info)
-		);
+		transporter.sendMail(sendThis, (error, info) => (error ? reject(error) : resolve(info)));
 	});
 };

@@ -16,11 +16,11 @@ module.exports = {
 			inner: `inset 0 2px 4px 0 rgba(var(--color-shadow), 0.06)`,
 			outline: `0 0 0 3px rgba(66, 153, 225, 0.5)`,
 			focus: `0 0 0 3px rgba(66, 153, 225, 0.5)`,
-			none: `none`,
+			none: `none`
 		},
 		extend: {
 			screens: {
-				'2xl': `1536px`,
+				'2xl': `1536px`
 			},
 			colors: {
 				bg: {
@@ -28,19 +28,19 @@ module.exports = {
 					lighter: `var(--color-bg-lighter)`,
 					darker: `var(--color-bg-darker)`,
 					accent: `var(--color-bg-accent)`,
-					'accent-darker': `var(--color-bg-accent-darker)`,
+					'accent-darker': `var(--color-bg-accent-darker)`
 				},
 				text: {
 					base: `var(--color-text-base)`,
 					reverse: `var(--color-bg-base)`,
 					lighter: `var(--color-text-lighter)`,
 					darker: `var(--color-text-darker)`,
-					accent: `var(--color-text-accent)`,
+					accent: `var(--color-text-accent)`
 				},
 				input: {
 					bg: `var(--color-input-bg)`,
 					placeholder: `var(--color-input-placeholder)`,
-					text: `var(--color-input-text)`,
+					text: `var(--color-input-text)`
 				},
 				border: `var(--color-border)`,
 				divider: `var(--color-divider)`,
@@ -51,17 +51,17 @@ module.exports = {
 				black: `var(--color-black)`,
 				// blue: `var(--color-blue)`,
 				yellow: `var(--color-yellow)`,
-				overlay: `rgba(81, 85, 90, .75)`,
+				overlay: `rgba(81, 85, 90, .75)`
 			},
 			fontFamily: {
 				mono: [`IBM Plex Mono`, `monospace`],
-				body: [`IBM Plex Mono`, `monospace`],
+				body: [`IBM Plex Mono`, `monospace`]
 			},
 			minHeight: {
-				content: `var(--min-h-content-area)`,
+				content: `var(--min-h-content-area)`
 			},
 			minWidth: {
-				content: `var(--min-w-content-area)`,
+				content: `var(--min-w-content-area)`
 			},
 			// spacing: {
 			// 	17: `4.25rem`,
@@ -73,13 +73,13 @@ module.exports = {
 			// 	lines: `20px 0`,
 			// },
 			boxShadow: {
-				full: `0 0px 20px 2px rgba(var(--color-shadow), .2)`,
-			},
-		},
+				full: `0 0px 20px 2px rgba(var(--color-shadow), .2)`
+			}
+		}
 	},
 	plugins: [
 		require(`@tailwindcss/ui`),
 		require(`@tailwindcss/custom-forms`),
-		require(`@neojp/tailwindcss-line-clamp-utilities`),
-	],
+		require(`@neojp/tailwindcss-line-clamp-utilities`)
+	]
 };
