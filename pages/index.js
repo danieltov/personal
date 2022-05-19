@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
-import Slider from 'react-slick';
 
 export default function Home() {
 	const [menuActive, setMenuActive] = useState(false);
@@ -10,7 +9,6 @@ export default function Home() {
 	const contactRef = useRef(null);
 	const helloRef = useRef(null);
 	const resumeRef = useRef(null);
-	const workRef = useRef(null);
 
 	const handleMenuItemClick = e => {
 		e.preventDefault();
@@ -25,11 +23,11 @@ export default function Home() {
 	return (
 		<>
 			<Head>
-				<title>Daniel Tovar&apos;s Developer Portfolio</title>
+				<title>Front End Engineer &mdash; Daniel Tovar</title>
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 				<meta
 					property="og:title"
-					content="Daniel Tovar's Developer Portfolio"
+					content="Front End Engineer Portfolio - Daniel Tovar"
 					key="title"
 				/>
 				<meta name="robots" content="index,follow" />
@@ -43,7 +41,7 @@ export default function Home() {
 					content="Daniel Tovar is a San Antonio-based web and mobile app developer specializing in React, React Native, and modern JavaScript frameworks and backends."
 				/>
 				<meta name="author" content="Daniel Tovar" />
-				<meta name="copyright" content="&copy; 2020" />
+				<meta name="copyright" content="&copy; 2022" />
 			</Head>
 			<div className={'mx-auto sm:mx-4 p-4'}>
 				{/* Menu */}
@@ -58,9 +56,12 @@ export default function Home() {
 					<div className="fixed top-0 right-0 p-3 sm:p-4 sm:inset-0">
 						<div
 							className="w-8 2xl:w-14 filter rounded box-content"
+							role="button"
+							tabIndex={0}
+							onKeyDown={e => e.key === 'Enter' && setMenuActive(prev => !prev)}
 							onClick={e => {
 								e.preventDefault();
-								setMenuActive(!menuActive);
+								setMenuActive(prev => !prev);
 							}}
 						>
 							<svg
@@ -101,6 +102,14 @@ export default function Home() {
 							<li className="my-3">
 								<Link href="/">
 									<a
+										role="link"
+										tabIndex={0}
+										onKeyDown={e => {
+											if (e.key === 'Enter') {
+												handleMenuItemClick(e);
+												scrollTo(helloRef);
+											}
+										}}
 										onClick={e => {
 											handleMenuItemClick(e);
 											scrollTo(helloRef);
@@ -113,6 +122,14 @@ export default function Home() {
 							<li className="my-3">
 								<Link href="/">
 									<a
+										role="link"
+										tabIndex={0}
+										onKeyDown={e => {
+											if (e.key === 'Enter') {
+												handleMenuItemClick(e);
+												scrollTo(aboutRef);
+											}
+										}}
 										onClick={e => {
 											handleMenuItemClick(e);
 											scrollTo(aboutRef);
@@ -125,6 +142,14 @@ export default function Home() {
 							<li className="my-3">
 								<Link href="/">
 									<a
+										role="link"
+										tabIndex={0}
+										onKeyDown={e => {
+											if (e.key === 'Enter') {
+												handleMenuItemClick(e);
+												scrollTo(resumeRef);
+											}
+										}}
 										onClick={e => {
 											handleMenuItemClick(e);
 											scrollTo(resumeRef);
@@ -137,18 +162,14 @@ export default function Home() {
 							<li className="my-3">
 								<Link href="/">
 									<a
-										onClick={e => {
-											handleMenuItemClick(e);
-											scrollTo(workRef);
+										role="link"
+										tabIndex={0}
+										onKeyDown={e => {
+											if (e.key === 'Enter') {
+												handleMenuItemClick(e);
+												scrollTo(contactRef);
+											}
 										}}
-									>
-										Work
-									</a>
-								</Link>
-							</li>
-							<li className="my-3">
-								<Link href="/">
-									<a
 										onClick={e => {
 											handleMenuItemClick(e);
 											scrollTo(contactRef);
@@ -189,34 +210,28 @@ export default function Home() {
 					<div className="my-auto sm:w-7/12 sm:flex-col sm:align-center">
 						<h2 className="text-lg text-gray-400 mb-2">&lt;HELLO WORLD /&gt;</h2>
 						<h1 className="font-regular text-gray-100 text-2xl normal-case">
-							I&apos;m Daniel Tovar, a{' '}
-							<span className="font-medium">Web and Mobile Developer</span> with 2+
-							years of experience coding for start-ups and universities.
+							I&apos;m Daniel Tovar. I&apos;m a <strong>Front End Engineer</strong>{' '}
+							specializing in React and TypeScript.
 						</h1>
 						<div className=" my-5 max-w-md mx-auto sm:flex sm:justify-center md:my-8">
 							<div className="rounded-sm border-2 border-gray-100">
 								<Link href="/">
 									<a
 										className="w-full flex items-center justify-center text-gray-100 uppercase p-3 text-center"
+										role="button"
+										tabIndex={0}
+										onKeyDown={e => {
+											if (e.key === 'Enter') {
+												handleMenuItemClick(e);
+												scrollTo(contactRef);
+											}
+										}}
 										onClick={e => {
 											handleMenuItemClick(e);
 											scrollTo(contactRef);
 										}}
 									>
 										Connect With Me
-									</a>
-								</Link>
-							</div>
-							<div>
-								<Link href="/">
-									<a
-										className="flex items-center justify-center text-gray-300 uppercase p-4 text-center"
-										onClick={e => {
-											handleMenuItemClick(e);
-											scrollTo(workRef);
-										}}
-									>
-										See My Work &rarr;
 									</a>
 								</Link>
 							</div>
@@ -241,9 +256,9 @@ export default function Home() {
 						<h1>About Me</h1>
 						<p className="my-4">
 							I&apos;m a Los Angeles native and San Antonio transplant, by way of Salt
-							Lake City, New Haven, and Honolulu. Along the way I have built
-							thoughtful things for the web and mobile for start-ups and large
-							institutions.
+							Lake City, New England, and Honolulu. Along the way I have built
+							thoughtful things for the web and mobile for early-stage start-ups, Inc.
+							5000 companies, and public institutions.
 						</p>
 						<p>
 							I&apos;ve puttered around the browser building the web since I was a
@@ -259,13 +274,14 @@ export default function Home() {
 					<div className="flex flex-col sm:relative sm:flex-row sm:flex-wrap sm:justify-around">
 						<header className="sm:w-11/12">
 							<h1>
-								Resume (
+								Resume
+								{/* Resume (
 								<Link href="/static/DanielTovarWebDeveloperResume.PDF">
 									<a target="_blank" rel="noreferrer" className="mx-1" download>
 										PDF
 									</a>
 								</Link>
-								)
+								) */}
 							</h1>
 						</header>
 						<aside className="sm:w-5/12">
@@ -273,21 +289,32 @@ export default function Home() {
 								<h2 className="text-2xl my-4">Work Experience</h2>
 							</header>
 							<div className="my-4">
-								<h3 className="text-xl">Front End Engineer</h3>
-								<Link href="https://zoowho.com/">
+								<h3 className="text-xl">Senior Front End Engineer</h3>
+								<Link href="https://madwire.com/">
 									<a target="_blank" rel="noreferrer" className="text-lg">
 										MadWire &#8599;
 									</a>
 								</Link>
 								<p className="text-base text-gray-200">
-									February 2021 &ndash; Current
+									January 2022 &ndash; Current
 								</p>
 							</div>
 							<div className="my-4">
-								<h3 className="text-xl">Principal Full-Stack Software Developer</h3>
-								<Link href="https://zoowho.com/">
+								<h3 className="text-xl">Front End Engineer</h3>
+								<Link href="https://madwire.com/">
 									<a target="_blank" rel="noreferrer" className="text-lg">
-										ZooWho &#8599;
+										MadWire &#8599;
+									</a>
+								</Link>
+								<p className="text-base text-gray-200">
+									February 2021 &ndash; January 2022
+								</p>
+							</div>
+							<div className="my-4">
+								<h3 className="text-xl">Software Engineer</h3>
+								<Link href="https://www.nouri.ai/">
+									<a target="_blank" rel="noreferrer" className="text-lg">
+										Nouri (ZooWho) &#8599;
 									</a>
 								</Link>
 								<p className="text-base text-gray-200">
@@ -320,7 +347,7 @@ export default function Home() {
 							</header>
 							<div className="my-4">
 								<h3 className="text-xl">University of Utah</h3>
-								<p className="text-lg">Full-Stack Web Development</p>
+								<p className="text-lg">Web Development</p>
 								<p className="text-base text-gray-200">2019</p>
 							</div>
 							<div className="my-4">
@@ -339,6 +366,7 @@ export default function Home() {
 									<header>
 										<h3 className="text-xl my-4">Front-End</h3>
 										<div className="my-4 sm:w-10/12">
+											<p className="my-4">TypeScript</p>
 											<p className="my-4">
 												JavaScript Frameworks (React, Next, Gatsby, Vue)
 											</p>
@@ -354,7 +382,9 @@ export default function Home() {
 										<h3 className="text-xl my-4">Back-End</h3>
 										<div className="my-4 sm:w-10/12">
 											<p className="my-4">API Design (REST)</p>
-											<p className="my-4">Database Design (MySQL, NoSQL)</p>
+											<p className="my-4">
+												Database Design (PosgreSQL, MongoDB)
+											</p>
 											<p className="my-4">Node.js</p>
 											<p className="my-4">Express.js</p>
 											<p className="my-4">PHP/Laravel</p>
@@ -389,163 +419,6 @@ export default function Home() {
 						/>
 					</figure>
 				</aside>
-
-				{/* WORK */}
-				<section id="slider" ref={workRef} className="content my-16 flex flex-col">
-					<header>
-						<h1>Work</h1>
-					</header>
-					<Slider
-						dots={false}
-						infinite
-						speed={500}
-						slidesToShow={1}
-						slidesToScroll={1}
-						swipe
-						afterChange={() => scrollTo(workRef)}
-					>
-						<aside className="outline-none">
-							<h2 className="text-2xl">Circles App by ZooWho, Inc.</h2>
-							<ul className="mx-1">
-								<li className="my-2">
-									<p>
-										This production iOS and Andriod app was built by me, in a
-										full-stack role, and another front-end developer. Circles is
-										a &quot;Personal CRM, Contacts Manager, and Digital
-										Rolodex&quot; which allows users to store notes, details,
-										factoids, reminders and goals to business or personal
-										contacts.
-									</p>
-								</li>
-								<li className="my-2">
-									<p>
-										As the sole back-end developer, it was my duty to design and
-										build a RESTful API in PHP (Laravel) and design and
-										administer a MySQL database.
-									</p>
-								</li>
-								<li className="my-2">
-									<p>
-										The app was built in React Native to efficiently develop for
-										both iOS and Android. My duties included designing the
-										app&apos;s data flow, connecting and consuming our API,
-										handling reminders and push notifications, and building UI
-										elements.
-									</p>
-								</li>
-							</ul>
-							<div className="flex flex-col sm:flex-row sm:justify-center my-4">
-								<Link href="https://zoowho.com/features/">
-									<a
-										className="flex items-center justify-center text-gray-300 uppercase text-center mx-4"
-										target="_blank"
-										rel="noreferrer"
-									>
-										Website &#8599;
-									</a>
-								</Link>
-								<Link href="https://zoowho.com/download/">
-									<a
-										className="flex items-center justify-center text-gray-300 uppercase text-center mx-4"
-										target="_blank"
-										rel="noreferrer"
-									>
-										Download App &#8599;
-									</a>
-								</Link>
-							</div>
-							<figure className="hidden sm:block">
-								<Image
-									className="rounded-sm"
-									src="/img/work-circles.png"
-									alt="iOS App Mockup"
-									width={842}
-									height={595}
-									layout="intrinsic"
-								/>
-							</figure>
-							<figure className="sm:hidden">
-								<iframe
-									title="ZooWho Video"
-									width="100%"
-									height="60%"
-									src="https://www.youtube-nocookie.com/embed/n_4Be8XXxbg?controls=1"
-									frameBorder="0"
-									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-									allowFullScreen
-								/>
-							</figure>
-						</aside>
-						<aside className="outline-none">
-							<h2 className="text-2xl">Enough</h2>
-							<ul className="mx-1">
-								<li className="my-2">
-									<p>
-										This a personal project I built with mental health in mind.
-										The concept is simple: the app asks users one question
-										&mdash; how are you feeling today? &mdash; and depending on
-										the answers, one of two things will happen.
-									</p>
-									<p className="my-4 ml-6">
-										1. If the user is feeling 🙂, the app will prompt them to
-										enter at least one positive affirmation: this could be an
-										achievement they’re proud of, a personal strength they’ve
-										identified, something in their life they’re grateful for, or
-										one of their favorite quotes.
-									</p>
-									<p className="m-4 ml-6">
-										2. If the user is feeling 😐 or 🙁, the app will remind them
-										of a positive affirmation they’ve entered before. They will
-										then have the option to cycle through other affirmations or
-										add new one.
-									</p>
-								</li>
-								<li className="my-2">
-									<p>I designed the UI and UX, then built the UI in React.</p>
-								</li>
-								<li className="my-2">
-									<p>
-										I developed the back-end. Data is read and stored using a
-										MongoDB-powered API, served on a Node/Express server.
-									</p>
-								</li>
-								<li className="my-2">
-									<p>Up next: a mobile app!</p>
-								</li>
-							</ul>
-							<div className="flex flex-col sm:flex-row sm:justify-center my-4">
-								<Link href="http://enough-app.com">
-									<a
-										className="flex items-center justify-center text-gray-300 uppercase text-center mx-4"
-										target="_blank"
-										rel="noreferrer"
-									>
-										WEBSITE &#8599;
-									</a>
-								</Link>
-								<Link href="https://github.com/danieltov/enough">
-									<a
-										className="flex items-center justify-center text-gray-300 uppercase text-center mx-4"
-										target="_blank"
-										rel="noreferrer"
-									>
-										GitHub Repo &#8599;
-									</a>
-								</Link>
-							</div>
-							<figure>
-								<Image
-									className="rounded-sm"
-									src="/img/enough.png"
-									alt="Screenshot of Website"
-									width={1020}
-									height={560}
-									layout="intrinsic"
-								/>
-							</figure>
-						</aside>
-					</Slider>
-				</section>
 
 				{/* CONTACT */}
 				<section ref={contactRef} className="content my-16">
