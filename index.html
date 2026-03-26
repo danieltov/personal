@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <title>Daniel Tovar — Software + Product Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --riso-coral: #FF6B6B;
+      --riso-teal: #2EC4B6;
+      --riso-yellow: #FFE66D;
+      --riso-blue: #4361EE;
+      --riso-pink: #FF006E;
+      --riso-black: #1A1A2E;
+      --riso-cream: #FDF6E3;
+      --riso-paper: #F5F0E1;
+      --riso-paper-dark: #E8E0CC;
+      --font-mono: 'Space Mono', 'Courier New', monospace;
+      --font-sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+      --offset-sm: 2px;
+      --offset-md: 3px;
+      --offset-lg: 4px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--riso-black);
+      background: var(--riso-paper);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Paper grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.08;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(26,26,46,0.03) 2px, rgba(26,26,46,0.03) 4px);
+    }
+
+    /* Registration marks */
+    .reg-mark { position: fixed; opacity: 0.25; pointer-events: none; z-index: 1001; }
+    .reg-mark.tl { top: 12px; left: 12px; }
+    .reg-mark.tr { top: 12px; right: 12px; }
+    .reg-mark.bl { bottom: 12px; left: 12px; }
+    .reg-mark.br { bottom: 12px; right: 12px; }
+    .reg-cross { width: 20px; height: 20px; position: relative; }
+    .reg-cross::before, .reg-cross::after { content: ''; position: absolute; background: var(--riso-black); }
+    .reg-cross::before { width: 100%; height: 1px; top: 50%; left: 0; }
+    .reg-cross::after { width: 1px; height: 100%; top: 0; left: 50%; }
+
+    /* ─── Overprint circles: top-right, teal + coral ─── */
+    .circle-1 {
+      position: fixed;
+      top: -120px; right: -120px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: var(--riso-teal);
+      opacity: 0.35;
+      filter: blur(2px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .circle-2 {
+      position: fixed;
+      top: 40px; right: -40px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: var(--riso-coral);
+      opacity: 0.3;
+      filter: blur(3px);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Rotated spine label on right edge ─── */
+    .spine {
+      position: fixed;
+      right: -36px;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--riso-black);
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    /* ─── Full-bleed layout ─── */
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Name zone: takes up the top portion ─── */
+    .name-zone {
+      padding: 10vw 5vw 0;
+      position: relative;
+    }
+
+    /* "DANIEL" flush left, huge */
+    .name-first {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: clamp(5rem, 18vw, 17rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: var(--riso-black);
+      text-transform: uppercase;
+      display: block;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .name-first::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      color: var(--riso-coral);
+      transform: translate(-4px, 3px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+    }
+
+    .name-first::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      color: var(--riso-teal);
+      transform: translate(4px, -3px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+    }
+
+    /* "TOVAR" flush right, same size */
+    .name-last {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: clamp(5rem, 18vw, 17rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: var(--riso-black);
+      text-transform: uppercase;
+      display: block;
+      text-align: right;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .name-last::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      text-align: right;
+      color: var(--riso-coral);
+      transform: translate(-4px, 3px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+    }
+
+    .name-last::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      text-align: right;
+      color: var(--riso-teal);
+      transform: translate(4px, -3px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+    }
+
+    /* ─── Thick horizontal rule slicing across ─── */
+    .slash {
+      height: 5px;
+      background: var(--riso-black);
+      margin: 4vw 0 0;
+      position: relative;
+    }
+
+    /* Teal offset rule underneath */
+    .slash::after {
+      content: '';
+      position: absolute;
+      top: var(--offset-lg); left: var(--offset-lg);
+      width: 100%; height: 100%;
+      background: var(--riso-teal);
+      opacity: 0.5;
+    }
+
+    /* ─── Content zone: pinned below the slash, two columns ─── */
+    .content-zone {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: none;
+    }
+
+    /* Left: label + bio */
+    .content-left {
+      padding: 32px 5vw 48px;
+      border-right: 3px solid var(--riso-black);
+      position: relative;
+    }
+
+    .header-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--riso-pink);
+      margin-bottom: 20px;
+      display: inline-block;
+      background: var(--riso-cream);
+      padding: 4px 12px;
+      border: 2px solid var(--riso-black);
+      position: relative;
+    }
+
+    .header-label::before {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 100%; height: 100%;
+      background: var(--riso-teal);
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .summary-block {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.75;
+      padding: 14px 18px;
+      background: var(--riso-cream);
+      border: 3px solid var(--riso-black);
+      position: relative;
+    }
+
+    .summary-block::before {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 100%; height: 100%;
+      background: var(--riso-teal);
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    /* Right: contact + CTA, vertically centered */
+    .content-right {
+      padding: 32px 5vw 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .contact-item {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--riso-black);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.75;
+      transition: opacity 0.15s ease;
+    }
+
+    .contact-item:hover { opacity: 1; }
+
+    .contact-item::before {
+      content: '//';
+      color: var(--riso-pink);
+      font-weight: 700;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border: 3px solid var(--riso-black);
+      background: var(--riso-yellow);
+      color: var(--riso-black);
+      position: relative;
+      transition: all 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      align-self: flex-start;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: var(--offset-md); left: var(--offset-md);
+      width: 100%; height: 100%;
+      background: var(--riso-teal);
+      z-index: -1;
+      transition: all 0.15s ease;
+    }
+
+    .cta:hover { transform: translate(calc(var(--offset-md) * -1), calc(var(--offset-md) * -1)); }
+    .cta:hover::before { top: calc(var(--offset-md) * 2); left: calc(var(--offset-md) * 2); }
+    .cta:active { transform: translate(var(--offset-sm), var(--offset-sm)); }
+    .cta:active::before { top: 0; left: 0; }
+
+    /* ─── Footer bar ─── */
+    .footer {
+      border-top: 3px solid var(--riso-black);
+      padding: 14px 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: var(--offset-sm); left: 0;
+      width: 100%; height: 100%;
+      background: var(--riso-yellow);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .footer p {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      opacity: 0.45;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    /* ─── Mobile ─── */
+    @media (max-width: 640px) {
+      .name-zone { padding: 12vw 4vw 0; }
+
+      .name-first,
+      .name-last { font-size: clamp(3.8rem, 20vw, 6rem); }
+
+      .content-zone {
+        grid-template-columns: 1fr;
+      }
+
+      .content-left {
+        border-right: none;
+        border-bottom: 3px solid var(--riso-black);
+        padding: 28px 4vw 28px;
+      }
+
+      .content-right {
+        padding: 28px 4vw 40px;
+      }
+
+      .reg-mark { display: none; }
+      .spine { display: none; }
+      .circle-1, .circle-2 { width: 220px; height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reg-mark tl"><div class="reg-cross"></div></div>
+  <div class="reg-mark tr"><div class="reg-cross"></div></div>
+  <div class="reg-mark bl"><div class="reg-cross"></div></div>
+  <div class="reg-mark br"><div class="reg-cross"></div></div>
+
+  <div class="circle-1" aria-hidden="true"></div>
+  <div class="circle-2" aria-hidden="true"></div>
+  <div class="spine" aria-hidden="true">danieltovar.dev — software + product engineer</div>
+
+  <div class="page">
+
+    <div>
+      <div class="name-zone">
+        <span class="name-first" data-text="Daniel">Daniel</span>
+        <span class="name-last" data-text="Tovar">Tovar</span>
+      </div>
+
+      <div class="slash"></div>
+
+      <div class="content-zone">
+        <div class="content-left">
+          <span class="header-label">Software + Product Engineer</span>
+          <div class="summary-block">
+            Engineer who got too comfortable talking to PMs. Full-stack in practice,
+            product-adjacent by habit, currently very interested in what AI actually changes.
+          </div>
+        </div>
+
+        <div class="content-right">
+          <p style="font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.65; opacity: 0.75; max-width: 26ch;">Email is the easiest way to reach me. I'm not hard to find.</p>
+          <a href="mailto:hi@danieltovar.dev" class="contact-item">hi@danieltovar.dev</a>
+          <a class="cta" href="mailto:hi@danieltovar.dev">Say hello</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>danieltovar.dev</p>
+      <p>Made somewhere on the internet</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daniel Tovar — Software and Product Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --riso-coral: #FF6B6B;
+      --riso-teal: #2EC4B6;
+      --riso-yellow: #FFE66D;
+      --riso-yellow-dark: #E6CF5C;
+      --riso-blue: #4361EE;
+      --riso-pink: #FF006E;
+      --riso-black: #1A1A2E;
+      --riso-cream: #FDF6E3;
+      --riso-paper: #F5F0E1;
+      --riso-paper-dark: #E8E0CC;
+      --font-mono: 'Space Mono', 'Courier New', monospace;
+      --font-sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+      --offset-sm: 2px;
+      --offset-md: 3px;
+      --offset-lg: 4px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--riso-black);
+      background: var(--riso-paper);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.08;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(26,26,46,0.03) 2px, rgba(26,26,46,0.03) 4px);
+    }
+
+    /* Registration marks */
+    .reg-mark {
+      position: fixed;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      color: var(--riso-black);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 1001;
+    }
+    .reg-mark.tl { top: 12px; left: 12px; }
+    .reg-mark.tr { top: 12px; right: 12px; }
+    .reg-mark.bl { bottom: 12px; left: 12px; }
+    .reg-mark.br { bottom: 12px; right: 12px; }
+    .reg-cross { width: 20px; height: 20px; position: relative; }
+    .reg-cross::before, .reg-cross::after { content: ''; position: absolute; background: var(--riso-black); }
+    .reg-cross::before { width: 100%; height: 1px; top: 50%; left: 0; }
+    .reg-cross::after { width: 1px; height: 100%; top: 0; left: 50%; }
+
+    /* Layout */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      padding: 80px 0 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 380px; height: 380px;
+      background: var(--riso-yellow);
+      border-radius: 50%;
+      opacity: 0.45;
+      filter: blur(2px);
+      mix-blend-mode: multiply;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      top: 30px; right: 40px;
+      width: 300px; height: 300px;
+      background: var(--riso-coral);
+      border-radius: 50%;
+      opacity: 0.35;
+      filter: blur(3px);
+      mix-blend-mode: multiply;
+    }
+
+    .header-content { position: relative; z-index: 2; }
+
+    .header-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--riso-pink);
+      margin-bottom: 12px;
+      display: inline-block;
+      background: var(--riso-cream);
+      padding: 4px 12px;
+      border: 2px solid var(--riso-black);
+      position: relative;
+    }
+
+    .header-label::before {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 100%; height: 100%;
+      background: var(--riso-teal);
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .name {
+      font-family: var(--font-mono);
+      font-size: clamp(2.8rem, 7vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--riso-black);
+      position: relative;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .name::before {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      color: var(--riso-coral);
+      transform: translate(-3px, 2px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+    }
+
+    .name::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      color: var(--riso-teal);
+      transform: translate(3px, -2px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+    }
+
+    .title-line {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--riso-black);
+      opacity: 0.6;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+    }
+
+    .contact-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .contact-item {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--riso-black);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.75;
+      transition: opacity 0.15s ease;
+    }
+
+    .contact-item:hover { opacity: 1; }
+
+    .contact-item::before {
+      content: '//';
+      color: var(--riso-pink);
+      font-weight: 700;
+    }
+
+    .summary-block {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      max-width: 560px;
+      padding: 16px 20px;
+      background: var(--riso-cream);
+      border-left: 5px solid var(--riso-teal);
+      border: 3px solid var(--riso-black);
+      position: relative;
+    }
+
+    .summary-block::before {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 100%; height: 100%;
+      background: var(--riso-teal);
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    /* Section divider */
+    .divider {
+      height: 3px;
+      background: repeating-linear-gradient(90deg, var(--riso-black) 0px, var(--riso-black) 8px, transparent 8px, transparent 16px);
+      opacity: 0.15;
+      margin: 48px 0;
+    }
+
+    /* Section label */
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--riso-cream);
+      background: var(--riso-pink);
+      display: inline-block;
+      padding: 4px 10px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .section-tag::before {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 100%; height: 100%;
+      background: var(--riso-blue);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: var(--riso-black);
+    }
+
+    /* Experience */
+    .job {
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .job-title {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--riso-black);
+    }
+
+    .job-company {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--riso-pink);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .job-dates {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--riso-black);
+      opacity: 0.5;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    .job-context {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--riso-black);
+      opacity: 0.75;
+      margin: 10px 0 14px;
+      max-width: 680px;
+    }
+
+    .job-bullets {
+      list-style: none;
+      padding: 0;
+    }
+
+    .job-bullets li {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      padding: 6px 0 6px 20px;
+      position: relative;
+      border-bottom: 1px dashed var(--riso-paper-dark);
+      max-width: 720px;
+    }
+
+    .job-bullets li:last-child { border-bottom: none; }
+
+    .job-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--riso-teal);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      top: 8px;
+    }
+
+    /* Highlight bullet for the revenue stories */
+    .job-bullets li.highlight {
+      background: var(--riso-cream);
+      border: 2px solid var(--riso-black);
+      border-bottom: 2px solid var(--riso-black);
+      padding: 10px 10px 10px 28px;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .job-bullets li.highlight::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 100%; height: 100%;
+      background: var(--riso-yellow);
+      opacity: 0.4;
+      z-index: -1;
+    }
+
+    .job-bullets li.highlight::before {
+      color: var(--riso-pink);
+      font-weight: 700;
+      top: 12px;
+      left: 10px;
+    }
+
+    /* Inline badge */
+    .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      border: 2px solid var(--riso-black);
+      background: var(--riso-coral);
+      color: var(--riso-cream);
+      position: relative;
+      top: -1px;
+      margin-left: 6px;
+    }
+
+    /* Shorter jobs */
+    .job-short {
+      margin-bottom: 32px;
+    }
+
+    .job-short .job-context {
+      margin-bottom: 0;
+    }
+
+    /* Two-column layout for bottom sections */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+      .job-header { flex-direction: column; }
+    }
+
+    /* Education */
+    .edu-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--riso-paper-dark);
+    }
+
+    .edu-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .edu-degree {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .edu-school {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--riso-pink);
+      letter-spacing: 0.05em;
+    }
+
+    .edu-year {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--riso-black);
+      opacity: 0.45;
+      font-style: italic;
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-chip {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 5px 10px;
+      border: 2px solid var(--riso-black);
+      background: var(--riso-cream);
+      position: relative;
+      transition: transform 0.15s ease;
+    }
+
+    .skill-chip:hover {
+      transform: translate(-2px, -2px);
+    }
+
+    .skill-chip::before {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    .skill-chip:nth-child(4n+1)::before { background: var(--riso-coral); opacity: 0.5; }
+    .skill-chip:nth-child(4n+2)::before { background: var(--riso-teal); opacity: 0.4; }
+    .skill-chip:nth-child(4n+3)::before { background: var(--riso-yellow); opacity: 0.6; }
+    .skill-chip:nth-child(4n+0)::before { background: var(--riso-blue); opacity: 0.3; }
+
+    /* Footer */
+    .footer {
+      padding: 48px 0 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 3px;
+      background: var(--riso-black);
+      opacity: 0.2;
+    }
+
+    .footer p {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      opacity: 0.45;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .header { padding: 56px 0 48px; }
+      .contact-row { gap: 14px; }
+      .reg-mark { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reg-mark tl"><div class="reg-cross"></div></div>
+  <div class="reg-mark tr"><div class="reg-cross"></div></div>
+  <div class="reg-mark bl"><div class="reg-cross"></div></div>
+  <div class="reg-mark br"><div class="reg-cross"></div></div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <span class="header-label">Software + Product Engineer · San Antonio</span>
+        <h1>
+          <div class="name" data-text="Daniel Tovar">Daniel Tovar</div>
+        </h1>
+        <div class="contact-row">
+          <a href="mailto:hi@danieltovar.dev" class="contact-item">hi@danieltovar.dev</a>
+          <a href="https://danieltovar.dev" class="contact-item" target="_blank">danieltovar.dev</a>
+        </div>
+
+        <div class="summary-block">
+          Five-plus years at Madwire across its transition from internal tooling to commercial SaaS. My scope has grown with the company: full-stack ownership, product ideation, frontend architecture, and AI integration strategy.
+        </div>
+      </div>
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- Experience -->
+    <section>
+      <div class="section-tag">01</div>
+      <h2 class="section-title">Experience</h2>
+
+      <!-- Madwire -->
+      <div class="job">
+        <div class="job-header">
+          <div>
+            <div class="job-title">Senior Software Engineer II <span class="job-company">· Madwire</span></div>
+          </div>
+          <div class="job-dates">Feb 2021 – Present</div>
+        </div>
+        <p class="job-context">Joined during Madwire's transition from internal operations tooling to commercial SaaS and have scaled with the product across five-plus years.</p>
+
+        <ul class="job-bullets">
+          <li>Code owner across six product areas: ad campaign management, marketing and site analytics, funnel conversion reporting, reputation management, and AI-assisted social content generation.</li>
+          <li class="highlight">
+            Greenfielded a job scheduler with my engineering manager in a single sprint; data model, backend, and frontend. The business introduced a new premium pricing tier around it within days of the POC.<span class="tag">New Revenue</span>
+          </li>
+          <li class="highlight">
+            Greenfielded a custom reporting product the same way; it became a standalone revenue stream and is currently being extended with a conversational AI interface for navigating complex marketing data.<span class="tag">New Revenue</span>
+          </li>
+          <li>First engineer on the frontend team to take on full-stack ownership; pushed for the expansion, built the case for it, and now own backend API design and data contracts across Node and Python services alongside frontend work.</li>
+          <li>Active contributor to AI-powered product initiatives: AI site builder, AI-assisted custom reports, social content generation, and image generation tooling.</li>
+          <li>Defined internal standards for AI and LLM tooling adoption across the engineering team; regularly consulted at CTO level on safe, scalable integration approaches.</li>
+          <li>Primary architectural voice for frontend decisions on the team; involved in frontend hiring and consulted on peer performance reviews.</li>
+          <li>Own the internal React/TypeScript component library; work closely with design from the earliest stages of a feature so engineering and design don't diverge.</li>
+        </ul>
+      </div>
+
+      <!-- Nouri -->
+      <div class="job job-short">
+        <div class="job-header">
+          <div>
+            <div class="job-title">Software Engineer <span class="job-company">· Nouri</span></div>
+          </div>
+          <div class="job-dates">Sep 2019 – Feb 2021</div>
+        </div>
+        <p class="job-context">Full-stack engineer on a JavaScript web and mobile platform (React/React Native, Laravel/PHP); made product-level decisions across the stack and owned AWS-provisioned MySQL infrastructure.</p>
+      </div>
+
+      <!-- UVU -->
+      <div class="job job-short">
+        <div class="job-header">
+          <div>
+            <div class="job-title">Front End Web Developer <span class="job-company">· Utah Valley University</span></div>
+          </div>
+          <div class="job-dates">Jan 2019 – Sep 2019</div>
+        </div>
+        <p class="job-context">Led web projects across 13 academic departments from conception to deployment.</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Education + Skills -->
+    <div class="two-col">
+
+      <section>
+        <div class="section-tag">02</div>
+        <h2 class="section-title">Education</h2>
+
+        <div class="edu-item">
+          <div class="edu-degree">B.S. Computer Science</div>
+          <div class="edu-school">Utah Valley University</div>
+          <div class="edu-year">2017 – 2019</div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-degree">Professional Ed. · Full-Stack Web Dev</div>
+          <div class="edu-school">University of Utah</div>
+          <div class="edu-year">2019</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-tag">03</div>
+        <h2 class="section-title">Skills</h2>
+
+        <div class="skills-grid">
+          <span class="skill-chip">React.js</span>
+          <span class="skill-chip">TypeScript</span>
+          <span class="skill-chip">Next.js</span>
+          <span class="skill-chip">Node.js</span>
+          <span class="skill-chip">Python</span>
+          <span class="skill-chip">PostgreSQL</span>
+          <span class="skill-chip">API Design</span>
+          <span class="skill-chip">Data Visualization</span>
+          <span class="skill-chip">AI/LLM Integration</span>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="footer">
+      <p>hi@danieltovar.dev · San Antonio · danieltovar.dev</p>
+    </footer>
+
+  </div>
+</body>
+</html>
