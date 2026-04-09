@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2a2a2a">
+<title>Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;500;600;700;800&family=Passion+One:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange:  #ff6a00;
+  --green:   #00cc44;
+  --pink:    #ff1493;
+  --cobalt:  #0044cc;
+  --yellow:  #ffcc00;
+  --violet:  #8800cc;
+  --cream:   #faf5e8;
+  --ink:     #2a2a2a;
+  --orange-d:#cc5500;
+  --cobalt-d:#003399;
+  --pink-d:  #cc0f75;
+  --f-disp:  'Lilita One', cursive;
+  --f-head:  'Passion One', sans-serif;
+  --f-body:  'Nunito', sans-serif;
+  --r1: 4px 12px 6px 14px;
+  --r2: 14px 6px 12px 4px;
+  --r3: 8px 20px 10px 24px;
+  --b3: 3px solid var(--ink);
+  --b4: 4px solid var(--ink);
+  --b5: 5px solid var(--ink);
+  --ease-pop: cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  --nav-h: 60px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; font-size: 16px; }
+body {
+  font-family: var(--f-body);
+  background: var(--cream);
+  color: var(--ink);
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0zm2 0h1v1H2zm4 0h1v1H6zm6 0h1v1h-1zm4 2h1v1h-1zm-8 2h1v1H6zm10 0h1v1h-1zm-4 2h1v1h-1zm8 2h1v1h-1zm-12 2h1v1H8zm6 4h1v1h-1zm-10 2h1v1H4zm14 0h1v1h-1zm-6 2h1v1h-1zm-8 4h1v1H4zm12 0h1v1h-1zm-6 2h1v1h-1z' fill='%23d5cbb8' fill-opacity='0.3'/%3E%3C/svg%3E");
+}
+
+/* ===================== APP SHELL ===================== */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Two panels that slide on mobile */
+#panels {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  width: 200%;
+  transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+}
+#panels.show-detail { transform: translateX(-50%); }
+
+/* ===================== LIST PANEL ===================== */
+#panel-list {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+#list-header {
+  padding: 16px 16px 10px;
+  border-bottom: 4px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+#list-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+#logo {
+  font-family: var(--f-disp);
+  font-size: 1.7rem;
+  color: var(--cream);
+  text-shadow: 3px 3px 0 var(--orange);
+  line-height: 1;
+}
+
+#list-desktop-btns {
+  display: none;
+  gap: 6px;
+}
+
+#search-row { display: flex; gap: 8px; }
+#search-wrap { position: relative; flex: 1; }
+#search-icon {
+  position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.4; pointer-events: none;
+}
+#search {
+  width: 100%;
+  font-family: var(--f-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 9px 12px 9px 34px;
+  background: rgba(255,255,255,0.1);
+  border: 3px solid rgba(255,255,255,0.15);
+  border-radius: var(--r1);
+  color: var(--cream);
+  outline: none;
+  -webkit-appearance: none;
+}
+#search::placeholder { color: rgba(250,245,232,0.35); }
+#search:focus { border-color: var(--yellow); }
+
+#btn-sort {
+  flex-shrink: 0;
+  font-family: var(--f-head);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 9px 10px;
+  background: transparent;
+  border: 3px solid rgba(255,255,255,0.2);
+  border-radius: var(--r2);
+  color: rgba(250,245,232,0.6);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+#btn-sort.asc { border-color: var(--yellow); color: var(--yellow); }
+
+/* tag strip */
+#tag-strip {
+  display: none;
+  padding: 8px 16px;
+  border-bottom: 3px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 6px;
+  align-items: center;
+}
+#tag-strip::-webkit-scrollbar { display: none; }
+#tag-strip.visible { display: flex; }
+#tag-label {
+  font-family: var(--f-head);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(250,245,232,0.38);
+  flex-shrink: 0;
+}
+.tag-pill {
+  flex-shrink: 0;
+  font-family: var(--f-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.2);
+  color: rgba(250,245,232,0.65);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.tag-pill.on { background: var(--yellow); color: var(--ink); border-color: var(--yellow); }
+
+/* entry list */
+#entry-list {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--nav-h) + var(--safe-b) + 4px);
+}
+#entry-list::-webkit-scrollbar { width: 3px; }
+#entry-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+.entry-item {
+  padding: 14px 16px;
+  border-left: 5px solid transparent;
+  border-bottom: 2px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 64px;
+}
+.entry-item:active { background: rgba(255,255,255,0.06); }
+.entry-item.active { border-left-color: var(--yellow); background: rgba(255,255,255,0.07); }
+
+.ei-date {
+  font-family: var(--f-head);
+  font-size: 0.67rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(250,245,232,0.38);
+  margin-bottom: 3px;
+}
+.ei-title {
+  font-family: var(--f-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.3;
+  margin-bottom: 4px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.ei-excerpt {
+  font-size: 0.77rem;
+  color: rgba(250,245,232,0.35);
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.ei-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+.ei-chip {
+  font-size: 0.63rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(136,0,204,0.35);
+  color: rgba(250,245,232,0.75);
+}
+
+#empty-msg {
+  padding: 48px 20px;
+  text-align: center;
+  color: rgba(250,245,232,0.28);
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.7;
+}
+#empty-msg strong {
+  display: block;
+  font-family: var(--f-disp);
+  font-size: 1.25rem;
+  color: rgba(250,245,232,0.45);
+  margin-bottom: 6px;
+  font-style: normal;
+}
+
+/* ===================== DETAIL PANEL ===================== */
+#panel-detail {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+#detail-welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+}
+#detail-welcome h2, #detail-welcome .welcome-heading {
+  font-family: var(--f-disp);
+  font-size: 2.4rem;
+  text-shadow: 4px 4px 0 var(--orange);
+  margin-bottom: 12px;
+}
+#detail-welcome p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(42,42,42,0.42);
+  line-height: 1.65;
+  max-width: 280px;
+}
+
+#editor-shell {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* detail toolbar */
+#detail-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: var(--b4);
+  background: var(--cream);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+#detail-actions { display: flex; gap: 8px; margin-left: auto; }
+#unsaved-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  display: none;
+  align-self: center;
+}
+#unsaved-dot.on { display: block; }
+
+/* mode tabs */
+#mode-tabs {
+  display: flex;
+  border-bottom: var(--b4);
+  background: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+}
+.mode-tab {
+  flex: 1;
+  font-family: var(--f-head);
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: rgba(42,42,42,0.4);
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mode-tab.active { color: var(--ink); border-bottom-color: var(--orange); }
+
+/* meta fields */
+#meta-fields {
+  padding: 12px 14px;
+  border-bottom: 3px solid rgba(42,42,42,0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.45);
+}
+.mf { display: flex; flex-direction: column; gap: 3px; }
+.mf.full { grid-column: 1 / -1; }
+.mf-lbl {
+  font-family: var(--f-head);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(42,42,42,0.36);
+  cursor: default;
+}
+.mf-inp {
+  font-family: var(--f-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 7px 10px;
+  border: var(--b3);
+  border-radius: var(--r2);
+  background: var(--cream);
+  color: var(--ink);
+  outline: none;
+  width: 100%;
+  -webkit-appearance: none;
+}
+.mf-inp:focus { border-color: var(--cobalt); box-shadow: 3px 3px 0 var(--cobalt); }
+#input-title { font-family: var(--f-disp); font-size: 1rem; }
+
+/* body area */
+#body-area {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+#body-editor {
+  position: absolute; inset: 0;
+  font-family: var(--f-body);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.75;
+  padding: 18px 16px calc(var(--nav-h) + var(--safe-b) + 20px);
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#body-preview {
+  position: absolute; inset: 0;
+  overflow-y: auto;
+  padding: 18px 16px calc(var(--nav-h) + var(--safe-b) + 20px);
+  display: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* markdown preview */
+#body-preview h1 { font-family:var(--f-disp); font-size:1.6rem; color:var(--orange); margin:1em 0 .4em; }
+#body-preview h2 { font-family:var(--f-disp); font-size:1.3rem; border-bottom:3px solid var(--ink); padding-bottom:3px; margin:1em 0 .4em; }
+#body-preview h3 { font-family:var(--f-head); font-size:1.1rem; margin:.9em 0 .3em; }
+#body-preview h4 { font-family:var(--f-head); font-size:1rem; color:var(--cobalt); margin:.8em 0 .3em; }
+#body-preview p  { margin:.7em 0; line-height:1.75; font-size:1rem; }
+#body-preview strong { font-weight:800; }
+#body-preview em     { font-style:italic; color:rgba(42,42,42,.72); }
+#body-preview ul, #body-preview ol { margin:.6em 0 .6em 1.4em; }
+#body-preview li { margin:.3em 0; line-height:1.6; }
+#body-preview hr { border:none; border-top:3px solid rgba(42,42,42,.15); margin:1.2em 0; }
+#body-preview blockquote { border-left:5px solid var(--orange); padding:8px 14px; margin:1em 0; background:rgba(255,106,0,.06); border-radius:0 var(--r2); font-style:italic; color:rgba(42,42,42,.78); }
+#body-preview code { font-family:monospace; font-size:.87em; background:rgba(42,42,42,.08); padding:2px 5px; border-radius:4px; }
+#body-preview pre  { background:var(--ink); color:var(--cream); padding:14px; border-radius:var(--r3); overflow-x:auto; margin:.8em 0; }
+#body-preview pre code { background:none; color:inherit; padding:0; }
+
+/* ===================== BOTTOM NAV ===================== */
+#bottom-nav {
+  height: calc(var(--nav-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: var(--ink);
+  border-top: var(--b4);
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  z-index: 50;
+}
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: var(--f-head);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250,245,232,0.4);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  padding: 6px 4px;
+  position: relative;
+}
+.nav-btn:active { opacity: 0.6; }
+.nav-btn .nav-icon { font-size: 1.25rem; line-height: 1; }
+.nav-btn.accent { color: var(--orange); }
+.nav-btn.hi { color: var(--cream); }
+.nav-btn.hi::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 3px;
+  background: var(--yellow);
+  border-radius: 0 0 3px 3px;
+}
+
+/* ===================== BUTTONS ===================== */
+.btn {
+  font-family: var(--f-head);
+  font-size: 0.8rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: var(--b3);
+  border-radius: var(--r1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  background: var(--cream);
+  color: var(--ink);
+  transition: all 0.18s var(--ease-pop);
+}
+.btn:active { transform: translate(2px,2px) !important; box-shadow: none !important; }
+.btn.sm     { font-size:.72rem; padding:6px 12px; }
+.btn.orange { background:var(--orange); color:#fff; }
+.btn.cobalt { background:var(--cobalt); color:#fff; }
+.btn.pink   { background:var(--pink);   color:#fff; }
+.btn.yellow { background:var(--yellow); color:var(--ink); }
+.btn.ink    { background:var(--ink);    color:var(--cream); }
+.btn.ghost  { background:transparent; border-color:rgba(42,42,42,.2); color:rgba(42,42,42,.55); }
+.btn.danger { background:var(--pink); color:#fff; }
+
+@media (hover:hover) {
+  .btn:hover         { transform:translate(-2px,-2px); box-shadow:3px 3px 0 var(--ink); }
+  .btn.orange:hover  { background:var(--orange-d); }
+  .btn.cobalt:hover  { background:var(--cobalt-d); }
+  .btn.pink:hover    { background:var(--pink-d); }
+  .entry-item:hover  { background:rgba(255,255,255,0.07); }
+}
+
+/* ===================== MODALS (bottom sheets) ===================== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(42,42,42,.72);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s;
+}
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal {
+  background: var(--cream);
+  border: var(--b5);
+  border-radius: var(--r3) var(--r3) 0 0;
+  width: 100%;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(60px);
+  transition: transform .26s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-drag {
+  width: 40px; height: 5px;
+  background: rgba(42,42,42,.18);
+  border-radius: 3px;
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+.modal-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px 10px;
+  border-bottom: var(--b4);
+  flex-shrink: 0;
+}
+.modal-ttl { font-family:var(--f-disp); font-size:1.3rem; }
+.modal-x {
+  font-family:var(--f-head); font-size:.85rem;
+  background:var(--pink); color:#fff;
+  border:var(--b3); border-radius:var(--r1);
+  padding:5px 12px; cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.modal-body {
+  flex: 1; overflow-y: auto; padding: 16px 18px;
+  -webkit-overflow-scrolling: touch;
+}
+.modal-ft {
+  padding: 12px 18px calc(12px + var(--safe-b));
+  border-top: var(--b4);
+  display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap;
+  align-items: center;
+}
+
+/* form inside modal */
+.mg { margin-bottom: 14px; }
+.ml {
+  display: block;
+  font-family: var(--f-head);
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.mh { font-size:.8rem; color:rgba(42,42,42,.5); margin-bottom:5px; }
+.mi, .mt {
+  width: 100%;
+  font-family: var(--f-body); font-size:.95rem; font-weight:600;
+  padding: 10px 13px;
+  border: var(--b4); border-radius: var(--r2);
+  background: var(--cream); color: var(--ink);
+  outline: none; -webkit-appearance: none;
+}
+.mi:focus { border-color:var(--cobalt); box-shadow:3px 3px 0 var(--cobalt); }
+.mt { resize:vertical; min-height:150px; font-weight:500; line-height:1.6; font-family:monospace; font-size:.82rem; }
+.mt:focus { border-color:var(--pink); box-shadow:3px 3px 0 var(--pink); }
+
+/* import tabs */
+#imp-tabs { display:flex; border-bottom:var(--b3); margin-bottom:14px; }
+.imp-tab {
+  flex:1; font-family:var(--f-head); font-size:.8rem; letter-spacing:.07em; text-transform:uppercase;
+  padding:9px 0; border:none; background:transparent; cursor:pointer;
+  color:rgba(42,42,42,.4); border-bottom:4px solid transparent; margin-bottom:-3px;
+  -webkit-tap-highlight-color:transparent;
+}
+.imp-tab.active { color:var(--ink); border-bottom-color:var(--cobalt); }
+.imp-panel { display:none; }
+.imp-panel.active { display:block; }
+
+#drop-zone {
+  border: 4px dashed rgba(42,42,42,.2);
+  border-radius: var(--r3);
+  padding: 32px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(0,0,0,.02);
+  -webkit-tap-highlight-color: transparent;
+}
+#drop-zone.drag-over { border-color:var(--cobalt); background:rgba(0,68,204,.05); }
+#drop-zone .drop-icon { font-size:2.2rem; }
+#drop-zone p { font-size:.87rem; font-weight:600; color:rgba(42,42,42,.44); margin-top:8px; }
+#file-input { display:none; }
+#imp-status { font-size:.8rem; font-weight:700; }
+
+/* ===================== TOAST ===================== */
+#toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + var(--safe-b) + 12px);
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  font-family: var(--f-head); font-size:.88rem; letter-spacing:.05em;
+  padding: 10px 20px;
+  border: var(--b3); border-radius: var(--r2);
+  background: var(--green); color: var(--ink);
+  z-index: 9999; opacity:0; pointer-events:none;
+  transition: all .28s var(--ease-pop);
+  white-space: nowrap; max-width:90vw; text-align:center;
+}
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+#toast.err  { background:var(--pink); color:#fff; }
+
+/* ===================== DESKTOP ≥700px ===================== */
+@media (min-width:700px) {
+  /* panels side-by-side, no slide */
+  #panels { width:100%; transition:none; }
+  #panels.show-detail { transform:none; }
+
+  #panel-list { width:300px; min-width:300px; border-right:var(--b5); }
+  #panel-detail { width:auto; flex:1; }
+
+  /* desktop header buttons visible */
+  #list-desktop-btns { display:flex; }
+
+  /* back button not needed */
+  #btn-back { display:none; }
+
+  /* bottom nav becomes top-of-sidebar footer — hide it */
+  #bottom-nav { display:none; }
+
+  /* remove bottom-nav padding from scrollable areas */
+  #entry-list   { padding-bottom:8px; }
+  #body-editor  { padding-bottom:20px; }
+  #body-preview { padding-bottom:20px; }
+
+  /* modals become centered dialogs */
+  .modal-overlay { align-items:center; }
+  .modal {
+    width: min(560px,90vw);
+    border-radius: var(--r3);
+    transform: translateY(30px) scale(0.97);
+  }
+  .modal-overlay.open .modal { transform:translateY(0) scale(1); }
+  .modal-drag { display:none; }
+
+  /* toast above bottom */
+  #toast { bottom:24px; }
+}
+@media (min-width:960px) {
+  #panel-list { width:340px; min-width:340px; }
+}
+
+* { scrollbar-width:thin; scrollbar-color:rgba(42,42,42,.16) transparent; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div id="panels">
+
+    <!-- LIST PANEL -->
+    <div id="panel-list">
+      <div id="list-header">
+        <div id="list-top">
+          <h1 id="logo">Journal</h1>
+          <div id="list-desktop-btns">
+            <button class="btn sm ink"    id="d-new">+ New</button>
+            <button class="btn sm cobalt" id="d-import">Import</button>
+            <button class="btn sm yellow" id="d-export">Export</button>
+          </div>
+        </div>
+        <div id="search-row">
+          <div id="search-wrap">
+            <svg id="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(250,245,232,0.42)" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <label for="search" class="sr-only">Search entries</label>
+            <input id="search" type="search" placeholder="Search…" autocomplete="off" autocorrect="off" spellcheck="false">
+          </div>
+          <button id="btn-sort">↓ New</button>
+        </div>
+      </div>
+
+      <div id="tag-strip"><span id="tag-label">Tags</span></div>
+
+      <div id="entry-list">
+        <div id="empty-msg"><strong>Nothing here</strong>Tap + to write, or import a file.</div>
+      </div>
+    </div>
+
+    <!-- DETAIL PANEL -->
+    <div id="panel-detail">
+      <div id="detail-welcome">
+        <h2 class="welcome-heading">Your Journal</h2>
+        <p>Select an entry or tap + to write a new one.</p>
+      </div>
+
+      <div id="editor-shell">
+        <div id="detail-bar">
+          <button class="btn sm ink" id="btn-back">← List</button>
+          <div id="unsaved-dot"></div>
+          <div id="detail-actions">
+            <button class="btn sm orange" id="btn-save">Save</button>
+            <button class="btn sm danger" id="btn-delete">Delete</button>
+          </div>
+        </div>
+
+        <div id="mode-tabs">
+          <button class="mode-tab active" data-mode="edit">Edit</button>
+          <button class="mode-tab"        data-mode="preview">Preview</button>
+        </div>
+
+        <div id="meta-fields">
+          <div class="mf full">
+            <label class="mf-lbl" for="input-title">Title</label>
+            <input class="mf-inp" id="input-title" type="text" placeholder="Entry title…" autocorrect="on">
+          </div>
+          <div class="mf">
+            <label class="mf-lbl" for="input-date">Date</label>
+            <input class="mf-inp" id="input-date" type="date">
+          </div>
+          <div class="mf">
+            <label class="mf-lbl" for="input-session">Session #</label>
+            <input class="mf-inp" id="input-session" type="text" placeholder="Optional" inputmode="numeric">
+          </div>
+          <div class="mf full">
+            <label class="mf-lbl" for="input-tags">Tags (comma-separated)</label>
+            <input class="mf-inp" id="input-tags" type="text" placeholder="mood, work, therapy…" autocorrect="off">
+          </div>
+        </div>
+
+        <div id="body-area">
+          <label for="body-editor" class="sr-only">Entry body</label>
+          <textarea id="body-editor" placeholder="Write here. Markdown supported.&#10;&#10;# Heading&#10;**bold** *italic*&#10;&gt; blockquote"></textarea>
+          <div id="body-preview" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panels -->
+
+  <!-- BOTTOM NAV (mobile only) -->
+  <nav id="bottom-nav">
+    <button class="nav-btn hi" id="nav-list">
+      <span class="nav-icon" aria-hidden="true">☰</span><span>Entries</span>
+    </button>
+    <button class="nav-btn accent" id="nav-new">
+      <span class="nav-icon" aria-hidden="true">✦</span><span>New</span>
+    </button>
+    <button class="nav-btn" id="nav-import">
+      <span class="nav-icon" aria-hidden="true">↑</span><span>Import</span>
+    </button>
+    <button class="nav-btn" id="nav-export">
+      <span class="nav-icon" aria-hidden="true">↓</span><span>Export</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="modal-import">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Import entries">
+    <div class="modal-drag"></div>
+    <div class="modal-hd">
+      <span class="modal-ttl">Import</span>
+      <button class="modal-x" data-close="modal-import" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="imp-tabs">
+        <button class="imp-tab active" data-panel="file">Upload File</button>
+        <button class="imp-tab"        data-panel="paste">Paste JSON</button>
+      </div>
+      <div class="imp-panel active" id="imp-file">
+        <div id="drop-zone" tabindex="0" role="button" aria-label="Upload a JSON or TXT file">
+          <div class="drop-icon">📂</div>
+          <p>Tap to choose a <strong>.json</strong> or <strong>.txt</strong> file</p>
+          <input type="file" id="file-input" accept=".json,.txt">
+        </div>
+        <p style="font-size:.77rem;color:rgba(42,42,42,.42);margin-top:10px;line-height:1.5;">Both journal and therapy JSON shapes supported. Duplicates (by ID) are skipped.</p>
+      </div>
+      <div class="imp-panel" id="imp-paste">
+        <div class="mg">
+          <label class="ml" for="paste-json">Paste JSON</label>
+          <p class="mh">Array <code>[…]</code> or <code>{"entries":[…]}</code> object.</p>
+          <textarea class="mt" id="paste-json" rows="8" placeholder='[{"id":"…","title":"…","date":"…","body":"…"}]'></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn orange" id="btn-do-import">Import</button>
+      <button class="btn ghost"  data-close="modal-import">Cancel</button>
+      <span id="imp-status"></span>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="modal-export">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Export entries">
+    <div class="modal-drag"></div>
+    <div class="modal-hd">
+      <span class="modal-ttl">Export</span>
+      <button class="modal-x" data-close="modal-export" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-weight:700;margin-bottom:10px;"><span id="exp-count">0</span> entries — one unified JSON file.</p>
+      <p style="font-size:.82rem;color:rgba(42,42,42,.5);line-height:1.6;margin-bottom:14px;">Fields: <code>id</code>, <code>title</code>, <code>date</code>, <code>body</code>, <code>session</code>, <code>tags</code>, <code>createdAt</code>, <code>updatedAt</code>.</p>
+      <div class="mg">
+        <div class="ml">Preview (first 3)</div>
+        <textarea class="mt" id="exp-preview" readonly style="background:rgba(42,42,42,.04);min-height:130px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn orange" id="btn-download">Download</button>
+      <button class="btn cobalt" id="btn-copy">Copy</button>
+      <button class="btn ghost"  data-close="modal-export">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Confirm action" style="max-height:50dvh;">
+    <div class="modal-drag"></div>
+    <div class="modal-hd">
+      <span class="modal-ttl" id="confirm-title">Confirm</span>
+      <button class="modal-x" data-close="modal-confirm" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-msg" style="font-size:1rem;font-weight:600;line-height:1.6;"></p>
+    </div>
+    <div class="modal-ft">
+      <button class="btn danger" id="btn-yes">Confirm</button>
+      <button class="btn ghost"  data-close="modal-confirm">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* =========================================================
+   STATE
+   ========================================================= */
+let entries   = [];
+let currentId = null;
+let sortAsc   = false;
+let query     = '';
+let activeTag = null;
+let unsaved   = false;
+let editMode  = 'edit';
+const KEY = 'journal_v2';
+
+/* =========================================================
+   UTILS
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const today = () => new Date().toISOString().slice(0,10);
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* =========================================================
+   PERSIST
+   ========================================================= */
+function load() {
+  try { const r = localStorage.getItem(KEY); if (r) entries = JSON.parse(r); }
+  catch(e) { entries = []; }
+}
+function persist() { localStorage.setItem(KEY, JSON.stringify(entries)); }
+
+/* =========================================================
+   NORMALIZE
+   ========================================================= */
+function norm(raw) {
+  const e = {};
+  e.id        = raw.id || uid();
+  e.title     = (raw.title || 'Untitled').trim();
+  e.date      = raw.date || today();
+  e.body      = (raw.body || '').trim();
+  const sess  = raw.session !== undefined ? String(raw.session).trim() : '';
+  if (sess) e.session = sess;
+  if (Array.isArray(raw.tags) && raw.tags.length)
+    e.tags = raw.tags.map(t => String(t).trim()).filter(Boolean);
+  else if (typeof raw.tags === 'string' && raw.tags.trim())
+    e.tags = raw.tags.split(',').map(t => t.trim()).filter(Boolean);
+  e.createdAt = raw.createdAt || new Date().toISOString();
+  e.updatedAt = raw.updatedAt || new Date().toISOString();
+  return e;
+}
+
+/* =========================================================
+   IMPORT
+   ========================================================= */
+function importRaw(raw) {
+  let arr = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.entries)) ? raw.entries : null;
+  if (!arr) throw new Error('Expected array or {entries:[…]}');
+  const ids = new Set(entries.map(e => e.id));
+  let added = 0;
+  for (const item of arr) {
+    const n = norm(item);
+    if (!ids.has(n.id)) { entries.push(n); ids.add(n.id); added++; }
+  }
+  persist();
+  return added;
+}
+
+/* =========================================================
+   FILTER / SORT
+   ========================================================= */
+function filtered() {
+  let list = [...entries];
+  if (activeTag) list = list.filter(e => (e.tags||[]).includes(activeTag));
+  if (query) {
+    const q = query.toLowerCase();
+    list = list.filter(e =>
+      e.title.toLowerCase().includes(q) ||
+      e.body.toLowerCase().includes(q) ||
+      (e.tags||[]).some(t => t.toLowerCase().includes(q))
+    );
+  }
+  list.sort((a,b) => sortAsc
+    ? (a.date||'').localeCompare(b.date||'')
+    : (b.date||'').localeCompare(a.date||''));
+  return list;
+}
+
+/* =========================================================
+   RENDER LIST
+   ========================================================= */
+function renderList() {
+  const list = filtered();
+  const el   = $('entry-list');
+  const emp  = $('empty-msg');
+
+  // tags
+  const tagMap = {};
+  entries.forEach(e => (e.tags||[]).forEach(t => { tagMap[t]=(tagMap[t]||0)+1; }));
+  const tags = Object.keys(tagMap).sort();
+  const strip = $('tag-strip');
+  if (tags.length) {
+    strip.className = 'visible';
+    strip.innerHTML = '<span id="tag-label">Tags</span>' +
+      tags.map(t => `<button class="tag-pill${activeTag===t?' on':''}" data-tag="${t}">${esc(t)}</button>`).join('');
+  } else { strip.className=''; strip.innerHTML=''; }
+
+  // items
+  Array.from(el.querySelectorAll('.entry-item')).forEach(n=>n.remove());
+  emp.style.display = list.length ? 'none' : 'block';
+
+  const frag = document.createDocumentFragment();
+  list.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'entry-item'+(e.id===currentId?' active':'');
+    div.dataset.id = e.id;
+    const excerpt = e.body.replace(/[#*_>`~\[\]()!]/g,'').replace(/\s+/g,' ').slice(0,90).trim();
+    const chips   = (e.tags||[]).map(t=>`<span class="ei-chip">${esc(t)}</span>`).join('');
+    div.innerHTML =
+      `<div class="ei-date">${esc(e.date)}${e.session?' · Session '+esc(e.session):''}</div>`+
+      `<div class="ei-title">${esc(e.title)}</div>`+
+      (excerpt?`<div class="ei-excerpt">${esc(excerpt)}…</div>`:'')+
+      (chips?`<div class="ei-tags">${chips}</div>`:'');
+    div.addEventListener('click', () => pickEntry(e.id));
+    frag.appendChild(div);
+  });
+  el.appendChild(frag);
+}
+
+/* =========================================================
+   PANEL NAVIGATION (mobile)
+   ========================================================= */
+function goList() {
+  $('panels').classList.remove('show-detail');
+  $('nav-list').classList.add('hi');
+  $('nav-new').classList.remove('hi');
+}
+function goDetail() {
+  $('panels').classList.add('show-detail');
+  $('nav-list').classList.remove('hi');
+}
+
+/* =========================================================
+   CUSTOM CONFIRM
+   ========================================================= */
+function confirmAction(title, msg, btnText, btnClass, cb) {
+  $('confirm-title').textContent = title;
+  $('confirm-msg').textContent = msg;
+  const btn = $('btn-yes');
+  btn.textContent = btnText;
+  btn.className = 'btn ' + btnClass;
+  openModal('modal-confirm');
+  btn.onclick = () => { closeModal('modal-confirm'); cb(); };
+}
+
+/* =========================================================
+   ENTRY SELECTION
+   ========================================================= */
+function pickEntry(id) {
+  if (unsaved && currentId) {
+    confirmAction('Unsaved Changes', 'Discard unsaved changes?', 'Discard', 'danger', () => {
+      setUnsaved(false);
+      doPickEntry(id);
+    });
+    return;
+  }
+  doPickEntry(id);
+}
+function doPickEntry(id) {
+  setUnsaved(false);
+  currentId = id;
+  const e = entries.find(x => x.id===id);
+  if (!e) return;
+  renderList();
+  populateEditor(e);
+  setMode('edit');
+  goDetail();
+}
+
+function populateEditor(e) {
+  $('detail-welcome').style.display = 'none';
+  $('editor-shell').style.display   = 'flex';
+  $('input-title').value   = e.title   || '';
+  $('input-date').value    = e.date    || '';
+  $('input-session').value = e.session || '';
+  $('input-tags').value    = (e.tags||[]).join(', ');
+  $('body-editor').value   = e.body    || '';
+  renderPreview();
+}
+
+function showWelcome() {
+  $('detail-welcome').style.display = '';
+  $('editor-shell').style.display   = 'none';
+}
+
+/* =========================================================
+   EDIT / PREVIEW MODE
+   ========================================================= */
+function setMode(mode) {
+  editMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode===mode));
+  $('body-editor').style.display  = mode==='edit'    ? 'block':'none';
+  $('body-preview').style.display = mode==='preview' ? 'block':'none';
+  if (mode==='preview') renderPreview();
+}
+
+/* =========================================================
+   MARKDOWN (zero deps)
+   ========================================================= */
+function md(raw) {
+  if (!raw) return '';
+  let h = esc(raw);
+  // fenced blocks
+  const pres = [];
+  h = h.replace(/```([\s\S]*?)```/g, (_,c) => { pres.push(`<pre><code>${c.trim()}</code></pre>`); return `\x00P${pres.length-1}\x00`; });
+  h = h.replace(/^######\s(.+)$/gm,'<h6>$1</h6>');
+  h = h.replace(/^#####\s(.+)$/gm,'<h5>$1</h5>');
+  h = h.replace(/^####\s(.+)$/gm,'<h4>$1</h4>');
+  h = h.replace(/^###\s(.+)$/gm,'<h3>$1</h3>');
+  h = h.replace(/^##\s(.+)$/gm,'<h2>$1</h2>');
+  h = h.replace(/^#\s(.+)$/gm,'<h1>$1</h1>');
+  h = h.replace(/^---+$/gm,'<hr>');
+  h = h.replace(/^&gt;\s(.+)$/gm,'<blockquote>$1</blockquote>');
+  h = h.replace(/`([^`]+)`/g,'<code>$1</code>');
+  h = h.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>');
+  h = h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  h = h.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  h = h.replace(/_(.+?)_/g,'<em>$1</em>');
+  h = h.replace(/^[-*]\s(.+)$/gm,'<li>$1</li>');
+  h = h.replace(/(<li>[\s\S]+?<\/li>)(?=\s*(?!<li>))/g, m=>`<ul>${m}</ul>`);
+  h = h.replace(/<\/ul>\s*<ul>/g,'');
+  h = h.replace(/^\d+\.\s(.+)$/gm,'<_li>$1</_li>');
+  h = h.replace(/(<_li>[\s\S]+?<\/_li>)(?=\s*(?!<_li>))/g, m=>`<ol>${m}</ol>`);
+  h = h.replace(/<\/ol>\s*<ol>/g,'');
+  h = h.replace(/<_li>/g,'<li>').replace(/<\/_li>/g,'</li>');
+  h = h.split(/\n{2,}/).map(b => {
+    b=b.trim(); if(!b) return '';
+    if(/^\x00P/.test(b)) return b;
+    if(/^<(h[1-6]|ul|ol|li|blockquote|pre|hr)/.test(b)) return b;
+    return `<p>${b.replace(/\n/g,'<br>')}</p>`;
+  }).join('\n');
+  h = h.replace(/\x00P(\d+)\x00/g, (_,i) => pres[i]);
+  return h;
+}
+function renderPreview() { $('body-preview').innerHTML = md($('body-editor').value); }
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+function saveEntry() {
+  if (!currentId) return;
+  const idx = entries.findIndex(e=>e.id===currentId);
+  if (idx===-1) return;
+  const tags = $('input-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const e = entries[idx];
+  e.title     = $('input-title').value.trim() || 'Untitled';
+  e.date      = $('input-date').value;
+  e.body      = $('body-editor').value;
+  e.updatedAt = new Date().toISOString();
+  const sess  = $('input-session').value.trim();
+  if (sess) e.session=sess; else delete e.session;
+  if (tags.length) e.tags=tags; else delete e.tags;
+  persist();
+  setUnsaved(false);
+  renderList();
+  toast('Saved ✓');
+}
+
+/* =========================================================
+   NEW ENTRY
+   ========================================================= */
+function newEntry() {
+  if (unsaved && currentId) {
+    confirmAction('Unsaved Changes', 'Discard unsaved changes?', 'Discard', 'danger', doNewEntry);
+    return;
+  }
+  doNewEntry();
+}
+function doNewEntry() {
+  setUnsaved(false);
+  const e = norm({ title:'New Entry', date:today(), body:'' });
+  entries.unshift(e);
+  persist();
+  currentId = e.id;
+  renderList();
+  populateEditor(e);
+  setMode('edit');
+  goDetail();
+  setTimeout(()=>{ $('input-title').focus(); $('input-title').select(); }, 80);
+}
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+function deleteEntry() {
+  if (!currentId) return;
+  const e = entries.find(x=>x.id===currentId);
+  if (!e) return;
+  confirmAction('Delete?', `Delete "${e.title}"? This cannot be undone.`, 'Delete', 'danger', () => {
+    entries = entries.filter(x=>x.id!==currentId);
+    persist(); currentId=null; setUnsaved(false);
+    showWelcome(); renderList(); goList();
+    toast('Entry deleted.');
+  });
+}
+
+/* =========================================================
+   UNSAVED
+   ========================================================= */
+function setUnsaved(v) { unsaved=v; $('unsaved-dot').classList.toggle('on',v); }
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+function openExport() {
+  $('exp-count').textContent = entries.length;
+  const prev = entries.slice(0,3).map(e => {
+    const o={id:e.id,title:e.title,date:e.date,body:e.body.slice(0,80)+'…'};
+    if(e.session) o.session=e.session;
+    if(e.tags)    o.tags=e.tags;
+    return o;
+  });
+  $('exp-preview').value = JSON.stringify(prev,null,2)+(entries.length>3?`\n// …and ${entries.length-3} more`:'');
+  openModal('modal-export');
+}
+function doDownload() {
+  const blob=new Blob([JSON.stringify(entries,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`journal_${today()}.json`; a.click();
+  URL.revokeObjectURL(url); closeModal('modal-export'); toast('Downloaded!');
+}
+function doCopy() {
+  navigator.clipboard.writeText(JSON.stringify(entries,null,2))
+    .then(()=>{ closeModal('modal-export'); toast('Copied!'); })
+    .catch(()=>toast('Copy failed.',true));
+}
+
+/* =========================================================
+   IMPORT
+   ========================================================= */
+function doImport() {
+  const panel = document.querySelector('.imp-panel.active').id;
+  if (panel==='imp-file') { setImpStatus('Choose a file above.',true); return; }
+  const raw = $('paste-json').value.trim();
+  if (!raw) { setImpStatus('Paste JSON first.',true); return; }
+  try {
+    const added = importRaw(JSON.parse(raw));
+    renderList(); closeModal('modal-import'); $('paste-json').value='';
+    toast(`Imported ${added} entr${added===1?'y':'ies'}.`);
+  } catch(e) { setImpStatus('Error: '+e.message,true); }
+}
+function handleFile(file) {
+  const r=new FileReader();
+  r.onload=ev=>{ try { const added=importRaw(JSON.parse(ev.target.result)); renderList(); closeModal('modal-import'); toast(`Imported ${added} entr${added===1?'y':'ies'}.`); } catch(e){ setImpStatus('Parse error: '+e.message,true); } };
+  r.readAsText(file);
+}
+function setImpStatus(msg,err) { const el=$('imp-status'); el.textContent=msg; el.style.color=err?'var(--pink)':'var(--green)'; }
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+let _prevFocus = null;
+function openModal(id) {
+  _prevFocus = document.activeElement;
+  $(id).classList.add('open');
+  const focusable = $(id).querySelectorAll('button, input, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable.length) focusable[0].focus();
+}
+function closeModal(id) {
+  $(id).classList.remove('open');
+  if (_prevFocus) { _prevFocus.focus(); _prevFocus = null; }
+}
+function trapFocus(e) {
+  const overlay = document.querySelector('.modal-overlay.open');
+  if (!overlay || e.key !== 'Tab') return;
+  const focusable = [...overlay.querySelectorAll('button, input, textarea, [tabindex]:not([tabindex="-1"])')];
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+let _tt;
+function toast(msg,err=false) {
+  const el=$('toast'); el.textContent=msg; el.className='show'+(err?' err':'');
+  clearTimeout(_tt); _tt=setTimeout(()=>{ el.className=''; },2800);
+}
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  load();
+  renderList();
+
+  // sort
+  $('btn-sort').addEventListener('click', ()=>{
+    sortAsc=!sortAsc;
+    $('btn-sort').textContent=sortAsc?'↑ Old':'↓ New';
+    $('btn-sort').classList.toggle('asc',sortAsc);
+    renderList();
+  });
+
+  // search
+  $('search').addEventListener('input', e=>{ query=e.target.value; renderList(); });
+
+  // tag strip (delegated)
+  $('tag-strip').addEventListener('click', e=>{
+    if (!e.target.classList.contains('tag-pill')) return;
+    const t=e.target.dataset.tag;
+    activeTag = activeTag===t ? null : t;
+    renderList();
+  });
+
+  // bottom nav
+  $('nav-list').addEventListener('click',   goList);
+  $('nav-new').addEventListener('click',    newEntry);
+  $('nav-import').addEventListener('click', ()=>{ setImpStatus(''); openModal('modal-import'); });
+  $('nav-export').addEventListener('click', openExport);
+
+  // desktop header buttons
+  $('d-new').addEventListener('click',    newEntry);
+  $('d-import').addEventListener('click', ()=>{ setImpStatus(''); openModal('modal-import'); });
+  $('d-export').addEventListener('click', openExport);
+
+  // detail bar
+  $('btn-back').addEventListener('click',   goList);
+  $('btn-save').addEventListener('click',   saveEntry);
+  $('btn-delete').addEventListener('click', deleteEntry);
+
+  // mode tabs
+  document.querySelectorAll('.mode-tab').forEach(t=>t.addEventListener('click',()=>setMode(t.dataset.mode)));
+
+  // editor input
+  $('body-editor').addEventListener('input',()=>{ setUnsaved(true); if(editMode==='preview') renderPreview(); });
+  ['input-title','input-date','input-session','input-tags'].forEach(id=>$(id).addEventListener('input',()=>setUnsaved(true)));
+
+  // keyboard
+  document.addEventListener('keydown', e=>{
+    if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); if(currentId) saveEntry(); }
+    if (e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>closeModal(m.id));
+    trapFocus(e);
+  });
+
+  // modal closes
+  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) closeModal(o.id); }));
+
+  // import tabs
+  document.querySelectorAll('.imp-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      document.querySelectorAll('.imp-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.imp-panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      $('imp-'+tab.dataset.panel).classList.add('active');
+      setImpStatus('');
+    });
+  });
+
+  // file drop zone
+  const dz=$('drop-zone'), fi=$('file-input');
+  dz.addEventListener('click',()=>fi.click());
+  dz.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' ') fi.click(); });
+  dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag-over'));
+  dz.addEventListener('drop',e=>{ e.preventDefault(); dz.classList.remove('drag-over'); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+  fi.addEventListener('change',()=>{ if(fi.files[0]) handleFile(fi.files[0]); fi.value=''; });
+
+  $('btn-do-import').addEventListener('click', doImport);
+  $('btn-download').addEventListener('click',  doDownload);
+  $('btn-copy').addEventListener('click',      doCopy);
+});
+</script>
+</body>
+</html>
