@@ -691,6 +691,7 @@ body {
             <button class="btn sm ink"    id="d-new">+ New</button>
             <button class="btn sm cobalt" id="d-import">Import</button>
             <button class="btn sm yellow" id="d-export">Export</button>
+            <button class="btn sm danger" id="d-clear">Clear All</button>
           </div>
         </div>
         <div id="search-row">
@@ -775,6 +776,9 @@ body {
     <button class="nav-btn" id="nav-export">
       <span class="nav-icon" aria-hidden="true">↓</span><span>Export</span>
     </button>
+    <button class="nav-btn" id="nav-clear">
+      <span class="nav-icon" aria-hidden="true">✕</span><span>Clear</span>
+    </button>
   </nav>
 
 </div><!-- /app -->
@@ -809,6 +813,9 @@ body {
       </div>
     </div>
     <div class="modal-ft">
+      <label style="display:flex;align-items:center;gap:6px;font-family:var(--f-body);font-size:.82rem;font-weight:700;cursor:pointer;margin-right:auto;">
+        <input type="checkbox" id="imp-overwrite"> Overwrite existing
+      </label>
       <button class="btn orange" id="btn-do-import">Import</button>
       <button class="btn ghost"  data-close="modal-import">Cancel</button>
       <span id="imp-status"></span>
@@ -916,9 +923,14 @@ function norm(raw) {
 /* =========================================================
    IMPORT
    ========================================================= */
-function importRaw(raw) {
+function importRaw(raw, overwrite) {
   let arr = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.entries)) ? raw.entries : null;
   if (!arr) throw new Error('Expected array or {entries:[…]}');
+  if (overwrite) {
+    entries = arr.map(norm);
+    persist();
+    return entries.length;
+  }
   const ids = new Set(entries.map(e => e.id));
   let added = 0;
   for (const item of arr) {
@@ -1168,6 +1180,19 @@ function deleteEntry() {
 }
 
 /* =========================================================
+   CLEAR ALL
+   ========================================================= */
+function clearAll() {
+  if (!entries.length) { toast('No entries to clear.', true); return; }
+  confirmAction('Clear All?', `Delete all ${entries.length} entr${entries.length===1?'y':'ies'}? This cannot be undone.`, 'Clear All', 'danger', () => {
+    entries = [];
+    persist(); currentId = null; setUnsaved(false);
+    showWelcome(); renderList(); goList();
+    toast('All entries cleared.');
+  });
+}
+
+/* =========================================================
    UNSAVED
    ========================================================= */
 function setUnsaved(v) { unsaved=v; $('unsaved-dot').classList.toggle('on',v); }
@@ -1203,18 +1228,21 @@ function doCopy() {
    ========================================================= */
 function doImport() {
   const panel = document.querySelector('.imp-panel.active').id;
+  const overwrite = $('imp-overwrite').checked;
   if (panel==='imp-file') { setImpStatus('Choose a file above.',true); return; }
   const raw = $('paste-json').value.trim();
   if (!raw) { setImpStatus('Paste JSON first.',true); return; }
   try {
-    const added = importRaw(JSON.parse(raw));
-    renderList(); closeModal('modal-import'); $('paste-json').value='';
-    toast(`Imported ${added} entr${added===1?'y':'ies'}.`);
+    const count = importRaw(JSON.parse(raw), overwrite);
+    currentId = null; showWelcome();
+    renderList(); closeModal('modal-import'); $('paste-json').value=''; $('imp-overwrite').checked=false;
+    toast(overwrite ? `Replaced with ${count} entr${count===1?'y':'ies'}.` : `Imported ${count} entr${count===1?'y':'ies'}.`);
   } catch(e) { setImpStatus('Error: '+e.message,true); }
 }
 function handleFile(file) {
+  const overwrite = $('imp-overwrite').checked;
   const r=new FileReader();
-  r.onload=ev=>{ try { const added=importRaw(JSON.parse(ev.target.result)); renderList(); closeModal('modal-import'); toast(`Imported ${added} entr${added===1?'y':'ies'}.`); } catch(e){ setImpStatus('Parse error: '+e.message,true); } };
+  r.onload=ev=>{ try { const count=importRaw(JSON.parse(ev.target.result), overwrite); currentId=null; showWelcome(); renderList(); closeModal('modal-import'); $('imp-overwrite').checked=false; toast(overwrite ? `Replaced with ${count} entr${count===1?'y':'ies'}.` : `Imported ${count} entr${count===1?'y':'ies'}.`); } catch(e){ setImpStatus('Parse error: '+e.message,true); } };
   r.readAsText(file);
 }
 function setImpStatus(msg,err) { const el=$('imp-status'); el.textContent=msg; el.style.color=err?'var(--pink)':'var(--green)'; }
@@ -1283,11 +1311,13 @@ document.addEventListener('DOMContentLoaded', () => {
   $('nav-new').addEventListener('click',    newEntry);
   $('nav-import').addEventListener('click', ()=>{ setImpStatus(''); openModal('modal-import'); });
   $('nav-export').addEventListener('click', openExport);
+  $('nav-clear').addEventListener('click',  clearAll);
 
   // desktop header buttons
   $('d-new').addEventListener('click',    newEntry);
   $('d-import').addEventListener('click', ()=>{ setImpStatus(''); openModal('modal-import'); });
   $('d-export').addEventListener('click', openExport);
+  $('d-clear').addEventListener('click',  clearAll);
 
   // detail bar
   $('btn-back').addEventListener('click',   goList);
